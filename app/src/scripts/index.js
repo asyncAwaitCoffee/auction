@@ -6,7 +6,7 @@ export class Item {
 }
 
 export class Lot {
-    constructor(item, img, lot_id, price, bid_step, quantity, current_bid = 0) {
+    constructor(item, img, text, lot_id, price, bid_step, quantity, current_bid = 0) {
         this.lot_id = lot_id
         this.price = price
         this.bid_step = bid_step
@@ -14,15 +14,17 @@ export class Lot {
         this.current_bid = current_bid
         this.item = item
         this.img = img
+        this.text = text
     }
 }
 
 export class Storage {
-    constructor(item, img, quantity) {
+    constructor(item, img, text, quantity) {
         this.id = item.item_id
         this.quantity = quantity
         this.item = item
         this.img = img
+        this.text = text
     }
 }
 

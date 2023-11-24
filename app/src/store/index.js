@@ -56,7 +56,7 @@ export default createStore({
             if (state.storage.has(box.item.item_id)) {
                 state.storage.get(box.item.item_id).quantity += box.quantity
             } else {
-                state.storage.set(box.item.item_id, new Storage(box.item, box.img, box.quantity))
+                state.storage.set(box.item.item_id, new Storage(box.item, box.img, box.text, box.quantity))
             }
         },
         async sellLot(state, {item_id, price, bid_step, quantity}) {
@@ -74,13 +74,13 @@ export default createStore({
             const stored = state.storage.get(item_id)
             
             if (need_to_del) {
-                state.lots.set(lot_id, new Lot(stored.item, stored.img, lot_id, price, bid_step, quantity))
+                state.lots.set(lot_id, new Lot(stored.item, stored.img, stored.text, lot_id, price, bid_step, quantity))
                 state.storage.delete(item_id)
                 return
             }
 
             stored.quantity -= quantity
-            state.lots.set(lot_id, new Lot(stored.item, stored.img, lot_id, price, bid_step, quantity))
+            state.lots.set(lot_id, new Lot(stored.item, stored.img, stored.text, lot_id, price, bid_step, quantity))
         },
         async cancelLot(state, lot) {
             const URL = `${adress}/auction/cancel?lot_id=${lot.lot_id}`
@@ -96,7 +96,7 @@ export default createStore({
 
             if (need_to_del) {
                 state.lots.delete(lot.lot_id)
-                this.commit('addItem', new Storage(lot.item, lot.quantity))
+                this.commit('addItem', new Storage(lot.item, stored.img, stored.text, lot.quantity))
             }
         },
         async bidLot(state, lot) {
