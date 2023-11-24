@@ -45,11 +45,26 @@ nav {
     align-items: stretch;
     width: 100%;
     border-bottom: 4px solid rgba(16, 83,115, 1);
+    overflow: hidden;
 }
 .btn {
     width: 10%;
+    position: relative;
+    isolation: isolate;
 }
 .home {
     margin-right: 70%;
+}
+
+.btn.auth::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    transform: skew(0.2turn);
+    background-color: var(--color-four);
 }
 </style>

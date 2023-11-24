@@ -94,17 +94,27 @@ app.post('/auction/bid', async (req, res) => {
 app.post('/auction/buy', async (req, res) => {
     const account_id = res.locals.account_id
     const { lot_id } = req.query
+
+    console.log(account_id, lot_id)
     
-    const money_left = await DB.queryRow('call vue3_learning.buy_auction_lot($1, $2, null);', account_id, lot_id)
-    res.send(money_left)
+    const { lot_owner, my_money, owner_money } = await DB.queryRow('call vue3_learning.buy_auction_lot($1, $2, null, null, null);', account_id, lot_id)
+
+    const prev_bidder_socket_id = connections.get(parseInt(lot_owner))
+    if (prev_bidder_socket_id) {
+      io.to(prev_bidder_socket_id).emit('lot_sold', JSON.stringify({ owner_money }))
+    }
+
+    io.emit("lot_remove", JSON.stringify({ lot_id }))
+
+    res.send(my_money)
 })
 
 app.post('/auction/sell', async (req, res) => {
     const account_id = res.locals.account_id
     const { item_id, price, bid_step, quantity } = req.query
-    console.log({ item_id, price, bid_step, quantity })
     const { lot_id, need_to_del } = await DB.queryRow('call vue3_learning.sell_auction_lot($1, $2, $3, $4, $5, null, null);', account_id, item_id, price, bid_step, quantity)
 
+    io.emit("lot_new", JSON.stringify({ lot_id }))
     res.send({lot_id, need_to_del})
 })
 
@@ -112,6 +122,8 @@ app.post('/auction/cancel', async (req, res) => {
     const account_id = res.locals.account_id
     const { lot_id } = req.query
     const need_to_del = await DB.queryRow('call vue3_learning.cancel_auction_lot($1, $2, null);', account_id, lot_id)
+
+    io.emit("lot_remove", JSON.stringify({ lot_id }))
 
     res.send(need_to_del)
 })
@@ -168,12 +180,14 @@ io.on('connection', async (socket) => {
   //console.log('a user connected');
   if (!socket.handshake.auth?.token) {
     socket.disconnect(true)
+    return
   }    
 
   const data = await DB.queryRow('select account_id, login from vue3_learning.verify_account($1)', socket.handshake.auth.token)
 
   if (!data) {
     socket.disconnect(true)
+    return
   }
 
   const { account_id } = data

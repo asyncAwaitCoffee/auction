@@ -34,6 +34,13 @@ export default {
   box-sizing: border-box;
 }
 
+:root {
+  --color-one: rgba(79, 78, 134, 1);
+  --color-two: rgba(176, 123, 193, 1);
+  --color-three: rgba(230, 145, 70, 1);
+  --color-four: rgba(212, 209, 44, 1);
+}
+
 button {
     border: none;
     background: none;
@@ -46,7 +53,7 @@ html, body {
 
 .app {
   height: 100svh;
-  background-image: linear-gradient(90deg, rgba(184, 205, 214), rgba(255, 255, 255));
+  background-image: linear-gradient(90deg, var(--color-one), rgba(255, 255, 255));
   display: grid;
   gap: 5px;
   grid-template-columns: 1fr 10fr;
@@ -99,7 +106,7 @@ html, body {
 }
 .wait:not(.no) {
     animation-name: waiting;
-    animation-duration: 0.1s;
+    animation-duration: 0.5s;
     animation-timing-function: ease;
     animation-iteration-count: infinite;
     animation-direction: alternate;
@@ -107,10 +114,12 @@ html, body {
 
 @keyframes waiting {
     from {
-        transform: rotate(5deg);
+        transform: rotateX(0.5turn);
+        background-color: red;
     }
     to {
-        transform: rotate(-5deg);
+        transform: rotateX(-0.5turn);
+        background-color: var(--color-one);
     }
 }
 

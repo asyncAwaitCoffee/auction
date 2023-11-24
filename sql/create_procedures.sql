@@ -84,7 +84,9 @@ create or replace procedure vue3_learning.buy_auction_lot
 	_account_id bigint,
 	_lot_id bigint,
 
-	out my_money bigint
+	out my_money bigint,
+	out lot_owner bigint,
+	out owner_money bigint
 )
 language plpgsql
 security definer												-- ??
@@ -92,6 +94,15 @@ as $$
 declare _item_id bigint;
 declare _quantity bigint;
 begin
+
+	if exists
+		(
+			select * from vue3_learning.auction as a
+		 	where a.lot_id = _lot_id
+			and a.lot_owner = _account_id
+		)
+	then return;
+	end if;
 
 	with lot as (
 		delete
@@ -102,7 +113,8 @@ begin
 			a.price,
 			a.quantity,
 			a.current_bid,
-			a.highest_bidder = _account_id as is_bidder
+			a.highest_bidder = _account_id as is_bidder,
+			a.lot_owner
 	),
 	pay as (
 		update vue3_learning.accounts as a
@@ -110,20 +122,31 @@ begin
 		from lot
 		where a.account_id = _account_id
 			and a.my_money >= lot.price
-		returning a.my_money
+		returning a.my_money, lot.price
+	),
+	income as (
+		update vue3_learning.accounts as a
+			set my_money = a.my_money + lot.price
+		from lot
+		where a.account_id = lot.lot_owner
+		returning a.my_money as recieved_money
 	)
 	select
 		lot.item_id,
 		pay.my_money,
-		lot.quantity
-	into _item_id, my_money, _quantity
+		lot.quantity,
+		lot.lot_owner,
+		income.recieved_money
+	into _item_id, my_money, _quantity, lot_owner, owner_money
 	from lot
 		left join pay
+			on true
+		left join income
 			on true;
-			
+	
 	if _item_id is null or my_money is null
-		then rollback;
-	end if;	
+		then raise exception 'buy_auction_lot(%, %)', _account_id, _lot_id;
+	end if;
 	
 	if found then
 		call vue3_learning.add_item_to_storage(_account_id, _item_id, _quantity);

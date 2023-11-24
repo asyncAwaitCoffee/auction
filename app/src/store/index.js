@@ -34,7 +34,7 @@ export default createStore({
             }
             
             const URL = `${adress}/auction/buy?lot_id=${lot.lot_id}`
-            const { my_money } = await fetch(URL, {
+            const my_money = await fetch(URL, {
                 credentials: 'include',
                 method: 'POST',
                 body: JSON.stringify({candy: localStorage.getItem('candy')}),
@@ -44,11 +44,8 @@ export default createStore({
                 .then(res => res.text())
                 .then(data => JSON.parse(data, parseIntegers))
 
-            state.money = my_money
-
-            state.auction.delete(lot.lot_id)
-            state.bids.delete(lot.lot_id)
-
+            this.commit('setMoney', my_money)
+            this.commit('removeFromAuction', lot.lot_id)
             this.commit('addItem', lot)
             
         },
@@ -59,6 +56,14 @@ export default createStore({
                 state.storage.set(box.item.item_id, new Storage(box.item, box.img, box.text, box.quantity))
             }
         },
+
+        removeFromAuction(state, lot_id) {
+            state.auction.delete(lot_id)
+            state.bids.delete(lot_id)
+            state.lots.delete(lot_id)
+            state.favs.delete(lot_id)
+        },
+
         async sellLot(state, {item_id, price, bid_step, quantity}) {
             const URL = `${adress}/auction/sell?item_id=${item_id}&quantity=${quantity}&price=${price}&bid_step=${bid_step}`
             const { lot_id, need_to_del } = await fetch(URL, {
@@ -95,8 +100,7 @@ export default createStore({
                 .then(data => JSON.parse(data, parseIntegers))
 
             if (need_to_del) {
-                state.lots.delete(lot.lot_id)
-                this.commit('addItem', new Storage(lot.item, stored.img, stored.text, lot.quantity))
+                this.commit('addItem', new Storage(lot.item, lot.img, lot.text, lot.quantity))
             }
         },
         async bidLot(state, lot) {
@@ -187,6 +191,10 @@ export default createStore({
                 },
                 product.speed
             )
+        },
+
+        setMoney(state, amount) {
+            state.money = amount
         },
 
         setForm(state, {form, data}) {
