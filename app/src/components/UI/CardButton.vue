@@ -13,7 +13,7 @@ export default {}
         background-color: rgba(241, 237,232, 1);
     }
     button {
-        background-color: rgba(16, 83,115, 1);
+        background-color: var(--color-one);
         border: 4px solid rgba(16, 83,115, 1);
         color: rgba(241, 237,232, 1);
         text-decoration: none;

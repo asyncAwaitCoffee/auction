@@ -1,12 +1,13 @@
 -----------------------------------------------------------------------	accounts
 truncate table vue3_learning.accounts;
 alter sequence vue3_learning.accounts_seq restart;
-/*
+
 insert into vue3_learning.accounts
 	(login, password_hash, my_money)
 values
-	('qwe1', '123', 10000);
-*/	
+	('qwe1', '123', 10000),
+	('qwe2', '123', 10000);
+
 -----------------------------------------------------------------------	items
 truncate table vue3_learning.items;
 alter sequence vue3_learning.items_seq restart;
@@ -44,53 +45,53 @@ alter sequence vue3_learning.auction_seq restart;
 insert into vue3_learning.auction
 	(item_id, price, quantity, bid_step, current_bid, date_start, date_end, lot_owner, highest_bidder)
 values
-	(1, 100, 1, 15, 15, now(), now()::timestamp + '5 day'::interval, -1, -2),
-	(2, 400, 1, 25, 25, now(), now()::timestamp + '1 day'::interval, -1, -2),
-	(3, 500, 1, 50, 50, now(), now()::timestamp + '3 day'::interval, -1, -2),
-	(4, 520, 1, 20, 20, now(), now()::timestamp + '2 day'::interval, -1, -2),
-	(5, 600, 1, 50, 50, now(), now()::timestamp + '4 day'::interval, -1, -2),
-	(6, 600, 1, 25, 25, now(), now()::timestamp + '6 day'::interval, -1, -2),
-	(7, 100, 1, 15, 15, now(), now()::timestamp + '5 day'::interval, -1, -2),
-	(8, 400, 1, 25, 25, now(), now()::timestamp + '1 day'::interval, -1, -2),
-	(9, 500, 1, 50, 50, now(), now()::timestamp + '3 day'::interval, -1, -2),
-	(10, 520, 1, 20, 20, now(), now()::timestamp + '2 day'::interval, -1, -2),
-	(11, 600, 1, 50, 50, now(), now()::timestamp + '4 day'::interval, -1, -2),
-	(12, 600, 1, 25, 25, now(), now()::timestamp + '6 day'::interval, -1, -2),
-	(13, 100, 1, 15, 15, now(), now()::timestamp + '5 day'::interval, -1, -2),
-	(14, 400, 1, 25, 25, now(), now()::timestamp + '1 day'::interval, -1, -2),
-	(15, 500, 1, 50, 50, now(), now()::timestamp + '3 day'::interval, -1, -2),
-	(16, 520, 1, 20, 20, now(), now()::timestamp + '2 day'::interval, -1, -2),
-	(17, 600, 1, 50, 50, now(), now()::timestamp + '4 day'::interval, -1, -2),
-	(18, 600, 1, 25, 25, now(), now()::timestamp + '6 day'::interval, -1, -2),
-	(19, 100, 1, 15, 15, now(), now()::timestamp + '5 day'::interval, -1, -2),
-	(20, 400, 1, 25, 25, now(), now()::timestamp + '1 day'::interval, -1, -2),
-	(21, 500, 1, 50, 50, now(), now()::timestamp + '3 day'::interval, -1, -2),
-	(22, 520, 1, 20, 20, now(), now()::timestamp + '2 day'::interval, -1, -2),
-	(23, 600, 1, 50, 50, now(), now()::timestamp + '4 day'::interval, -1, -2),
-	(24, 600, 1, 25, 25, now(), now()::timestamp + '6 day'::interval, -1, -2),	
-	(1, 100, 2, 15, 15, now(), now()::timestamp + '5 day'::interval, -1, -2),
-	(2, 400, 2, 25, 25, now(), now()::timestamp + '1 day'::interval, -1, -2),
-	(3, 500, 2, 50, 50, now(), now()::timestamp + '3 day'::interval, -1, -2),
-	(4, 520, 2, 20, 20, now(), now()::timestamp + '2 day'::interval, -1, -2),
-	(5, 600, 2, 50, 50, now(), now()::timestamp + '4 day'::interval, -1, -2),
-	(6, 600, 2, 25, 25, now(), now()::timestamp + '6 day'::interval, -1, -2),
-	(7, 100, 2, 15, 15, now(), now()::timestamp + '5 day'::interval, -1, -2),
-	(8, 400, 2, 25, 25, now(), now()::timestamp + '1 day'::interval, -1, -2),
-	(9, 500, 2, 50, 50, now(), now()::timestamp + '3 day'::interval, -1, -2),
-	(10, 520, 2, 20, 20, now(), now()::timestamp + '2 day'::interval, -1, -2),
-	(11, 600, 2, 50, 50, now(), now()::timestamp + '4 day'::interval, -1, -2),
-	(12, 600, 2, 25, 25, now(), now()::timestamp + '6 day'::interval, -1, -2),
-	(13, 100, 2, 15, 15, now(), now()::timestamp + '5 day'::interval, -1, -2),
-	(14, 400, 2, 25, 25, now(), now()::timestamp + '1 day'::interval, -1, -2),
-	(15, 500, 2, 50, 50, now(), now()::timestamp + '3 day'::interval, -1, -2),
-	(16, 520, 2, 20, 20, now(), now()::timestamp + '2 day'::interval, -1, -2),
-	(17, 600, 2, 50, 50, now(), now()::timestamp + '4 day'::interval, -1, -2),
-	(18, 600, 2, 25, 25, now(), now()::timestamp + '6 day'::interval, -1, -2),
-	(19, 100, 2, 15, 15, now(), now()::timestamp + '5 day'::interval, -1, -2),
-	(20, 400, 2, 25, 25, now(), now()::timestamp + '1 day'::interval, -1, -2),
-	(21, 500, 2, 50, 50, now(), now()::timestamp + '3 day'::interval, -1, -2),
-	(22, 520, 2, 20, 20, now(), now()::timestamp + '2 day'::interval, -1, -2),
-	(24, 600, 2, 25, 25, now(), now()::timestamp + '6 day'::interval, -1, -2);
+	(1, 100, 1, 15, 15, now(), now()::timestamp + '5 day'::interval, 1, -2),
+	(2, 400, 1, 25, 25, now(), now()::timestamp + '1 day'::interval, 1, -2),
+	(3, 500, 1, 50, 50, now(), now()::timestamp + '3 day'::interval, 1, -2),
+	(4, 520, 1, 20, 20, now(), now()::timestamp + '2 day'::interval, 1, -2),
+	(5, 600, 1, 50, 50, now(), now()::timestamp + '4 day'::interval, 1, -2),
+	(6, 600, 1, 25, 25, now(), now()::timestamp + '6 day'::interval, 1, -2),
+	(7, 100, 1, 15, 15, now(), now()::timestamp + '5 day'::interval, 1, -2),
+	(8, 400, 1, 25, 25, now(), now()::timestamp + '1 day'::interval, 1, -2),
+	(9, 500, 1, 50, 50, now(), now()::timestamp + '3 day'::interval, 1, -2),
+	(10, 520, 1, 20, 20, now(), now()::timestamp + '2 day'::interval, 2, -2),
+	(11, 600, 1, 50, 50, now(), now()::timestamp + '4 day'::interval, 2, -2),
+	(12, 600, 1, 25, 25, now(), now()::timestamp + '6 day'::interval, 2, -2),
+	(13, 100, 1, 15, 15, now(), now()::timestamp + '5 day'::interval, 2, -2),
+	(14, 400, 1, 25, 25, now(), now()::timestamp + '1 day'::interval, 2, -2),
+	(15, 500, 1, 50, 50, now(), now()::timestamp + '3 day'::interval, 2, -2),
+	(16, 520, 1, 20, 20, now(), now()::timestamp + '2 day'::interval, 2, -2),
+	(17, 600, 1, 50, 50, now(), now()::timestamp + '4 day'::interval, 2, -2),
+	(18, 600, 1, 25, 25, now(), now()::timestamp + '6 day'::interval, 2, -2),
+	(19, 100, 1, 15, 15, now(), now()::timestamp + '5 day'::interval, 2, -2),
+	(20, 400, 1, 25, 25, now(), now()::timestamp + '1 day'::interval, 2, -2),
+	(21, 500, 1, 50, 50, now(), now()::timestamp + '3 day'::interval, 2, -2),
+	(22, 520, 1, 20, 20, now(), now()::timestamp + '2 day'::interval, 2, -2),
+	(23, 600, 1, 50, 50, now(), now()::timestamp + '4 day'::interval, 2, -2),
+	(24, 600, 1, 25, 25, now(), now()::timestamp + '6 day'::interval, 2, -2),	
+	(1, 100, 2, 15, 15, now(), now()::timestamp + '5 day'::interval, 2, -2),
+	(2, 400, 2, 25, 25, now(), now()::timestamp + '1 day'::interval, 2, -2),
+	(3, 500, 2, 50, 50, now(), now()::timestamp + '3 day'::interval, 2, -2),
+	(4, 520, 2, 20, 20, now(), now()::timestamp + '2 day'::interval, 2, -2),
+	(5, 600, 2, 50, 50, now(), now()::timestamp + '4 day'::interval, 2, -2),
+	(6, 600, 2, 25, 25, now(), now()::timestamp + '6 day'::interval, 2, -2),
+	(7, 100, 2, 15, 15, now(), now()::timestamp + '5 day'::interval, 2, -2),
+	(8, 400, 2, 25, 25, now(), now()::timestamp + '1 day'::interval, 2, -2),
+	(9, 500, 2, 50, 50, now(), now()::timestamp + '3 day'::interval, 2, -2),
+	(10, 520, 2, 20, 20, now(), now()::timestamp + '2 day'::interval, 1, -2),
+	(11, 600, 2, 50, 50, now(), now()::timestamp + '4 day'::interval, 1, -2),
+	(12, 600, 2, 25, 25, now(), now()::timestamp + '6 day'::interval, 1, -2),
+	(13, 100, 2, 15, 15, now(), now()::timestamp + '5 day'::interval, 1, -2),
+	(14, 400, 2, 25, 25, now(), now()::timestamp + '1 day'::interval, 1, -2),
+	(15, 500, 2, 50, 50, now(), now()::timestamp + '3 day'::interval, 1, -2),
+	(16, 520, 2, 20, 20, now(), now()::timestamp + '2 day'::interval, 1, -2),
+	(17, 600, 2, 50, 50, now(), now()::timestamp + '4 day'::interval, 1, -2),
+	(18, 600, 2, 25, 25, now(), now()::timestamp + '6 day'::interval, 1, -2),
+	(19, 100, 2, 15, 15, now(), now()::timestamp + '5 day'::interval, 1, -2),
+	(20, 400, 2, 25, 25, now(), now()::timestamp + '1 day'::interval, 1, -2),
+	(21, 500, 2, 50, 50, now(), now()::timestamp + '3 day'::interval, 1, -2),
+	(22, 520, 2, 20, 20, now(), now()::timestamp + '2 day'::interval, 1, -2),
+	(24, 600, 2, 25, 25, now(), now()::timestamp + '6 day'::interval, 1, -2);
 	
 -----------------------------------------------------------------------	storage
 truncate table vue3_learning.storage;

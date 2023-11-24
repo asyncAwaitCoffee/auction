@@ -90,7 +90,7 @@ export default {
     border: 1px solid black;
     margin-top: 0.4%;
     margin-left: 0.4%;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.8);
     transition: 0.5s all;
     display: flex;
     flex-direction: row;
@@ -110,7 +110,7 @@ export default {
     }
 }
 .card__wrapper:hover {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.95);
     transform: translateY(1%);
     z-index: 99;
     box-shadow: 0 10px 5px 10px rgba(80, 147,179, 0.3);
@@ -191,14 +191,14 @@ footer {
 }
 
 .bidded {
-    background-color: goldenrod;
+    background-color: var(--color-three);
     color: black;
 }
 .no.bidded {
-    background-image: linear-gradient(0.20turn, red, red 50%, goldenrod, goldenrod 50%);
+    background-image: linear-gradient(0.20turn, red, red 50%, var(--color-three), var(--color-three) 50%);
 }
 .faved {
-    background-color: goldenrod;
+    background-color: var(--color-three);
     color: black;
 }
 </style>

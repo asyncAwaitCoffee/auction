@@ -61,6 +61,24 @@ export class MySocket {
         const parsed = JSON.parse(data, parseIntegers)
         store.commit('refreshBid', parsed)
     });
+  
+    this.#socket.on("lot_sold",
+      data => {
+        const { owner_money } = JSON.parse(data, parseIntegers)
+        store.commit('setMoney', owner_money)
+    });
+  
+    this.#socket.on("lot_remove",
+      data => {
+        const { lot_id } = JSON.parse(data, parseIntegers)
+        store.commit('removeFromAuction', lot_id)
+    });
+  
+    this.#socket.on("lot_new",
+      data => {
+        const { lot_id } = JSON.parse(data, parseIntegers)
+        console.log("lot_new: ", lot_id)
+    });    
 
     return this.#socket
   }
