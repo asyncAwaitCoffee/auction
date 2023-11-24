@@ -26,6 +26,7 @@ export default {
                 .then(data => JSON.parse(data, parseIntegers))
 
             if ( ok ) {
+                localStorage.removeItem('candy');
                 this.$store.state.onlyForceLoad = false
                 this.$store.state.pageNumber = 0
                 this.$store.commit('clearLogin')

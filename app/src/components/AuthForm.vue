@@ -36,7 +36,8 @@ export default {
                 .then(data => JSON.parse(data, parseIntegers))
 
             if ( ok ) {
-                console.log('candy:', candy)
+                localStorage.setItem('candy', candy);
+
                 this.$store.commit('setAccountLoading', true)
                 this.$store.commit('setPageLoading', true)
                 this.$store.state.pageNumber = 0
