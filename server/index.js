@@ -14,8 +14,9 @@ const port = 443
 
 app.use(cors({credentials: true, origin: process.env.CORS_ORIGIN}))
 app.use(cookieParser('cookieSecret'))
+app.use(express.json());
 
-app.get('*', authCheck)
+app.all('*', authCheck)
 
 app.get('/signup', async (req, res) => {
 
@@ -23,7 +24,7 @@ app.get('/signup', async (req, res) => {
     const { login, password } = req.query
     const { account_token } = await DB.queryRow('call vue3_learning.auth_sign_up($1, $2, null)', login, password)
   
-    //res.cookie("test", account_token, {httpOnly: true, maxAge: 4 * 60 * 60 * 1000, sameSite: "none", secure: true })  
+    //res.cookie("test", account_token, {httpOnly: true, maxAge: 4 * 60 * 60 * 1000, sameSite: "none", secure: true })
     res.send({ok: true, candy: account_token})
 
   } catch(error) {
@@ -49,18 +50,18 @@ app.get('/signin', async (req, res) => {
 })
 
 app.get('/signout', async (req, res) => {
-  res.cookie("test", '', {httpOnly: true, maxAge: 1 })
+  //res.cookie("test", '', {httpOnly: true, maxAge: 1 })
   res.send({ok: true})
 
 })
 
-app.get('/account', async (req, res) => {
+app.post('/account', async (req, res) => {
     const account_id = res.locals.account_id
     const result = await DB.queryRow('select * from vue3_learning.get_account($1)', account_id)
     res.send(result)
 })
 
-app.get('/auction', async (req, res) => {
+app.post('/auction', async (req, res) => {
     const account_id = res.locals.account_id
 
     const { limit, offset } = req.query
@@ -69,7 +70,7 @@ app.get('/auction', async (req, res) => {
     res.send({result})
 })
 
-app.get('/auction/bid', async (req, res) => {
+app.post('/auction/bid', async (req, res) => {
     const account_id = res.locals.account_id
     const { lot_id } = req.query
     
@@ -90,7 +91,7 @@ app.get('/auction/bid', async (req, res) => {
     res.send({ money_left })
 })
 
-app.get('/auction/buy', async (req, res) => {
+app.post('/auction/buy', async (req, res) => {
     const account_id = res.locals.account_id
     const { lot_id } = req.query
     
@@ -98,7 +99,7 @@ app.get('/auction/buy', async (req, res) => {
     res.send(money_left)
 })
 
-app.get('/auction/sell', async (req, res) => {
+app.post('/auction/sell', async (req, res) => {
     const account_id = res.locals.account_id
     const { item_id, price, bid_step, quantity } = req.query
     console.log({ item_id, price, bid_step, quantity })
@@ -107,7 +108,7 @@ app.get('/auction/sell', async (req, res) => {
     res.send({lot_id, need_to_del})
 })
 
-app.get('/auction/cancel', async (req, res) => {
+app.post('/auction/cancel', async (req, res) => {
     const account_id = res.locals.account_id
     const { lot_id } = req.query
     const need_to_del = await DB.queryRow('call vue3_learning.cancel_auction_lot($1, $2, null);', account_id, lot_id)
@@ -115,7 +116,7 @@ app.get('/auction/cancel', async (req, res) => {
     res.send(need_to_del)
 })
 
-app.get('/auction/fav', async (req, res) => {
+app.post('/auction/fav', async (req, res) => {
     const account_id = res.locals.account_id
     const { lot_id } = req.query
     const need_to_del = await DB.queryRow('call vue3_learning.add_item_to_fav($1, $2, null);', account_id, lot_id)
@@ -123,13 +124,13 @@ app.get('/auction/fav', async (req, res) => {
     res.send(need_to_del)
 })
 
-app.get('/storage', async (req, res) => {
+app.post('/storage', async (req, res) => {
     const account_id = res.locals.account_id
     const result = await DB.queryRows('select * from vue3_learning.get_storage($1)', account_id)
     res.send({result})
 })
 
-app.get('/production', async (req, res) => {
+app.post('/production', async (req, res) => {
     const account_id = res.locals.account_id
     const result = await DB.queryRows('select * from vue3_learning.get_production($1)', account_id)
     res.send({result})
@@ -144,32 +145,40 @@ const io = new Server(server, {
     origin: process.env.CORS_ORIGIN,
     credentials: true
   },
+  /*
   allowRequest: async (req, callback) => {
     let data
-    console.log('--- socket cookie ---')
-    console.log(req.headers.cookie)
-    console.log('--- socket cookie ---')
     if (req.headers.cookie) {
       const cookies = parse(req.headers.cookie)
       const account_token = cookies.test  
       data = await DB.queryRow('select account_id, login from vue3_learning.verify_account($1)', account_token)
     }
 
-    console.log(`CORS_ORIGIN: ${process.env.CORS_ORIGIN}`)
-    console.log("data", data)
-
     req.account_data = data
 
     callback(null, data != null);
   }
+  */
 });
 
 //maps account's id and socket's id
 const connections = new Map()
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
   //console.log('a user connected');
-  const { account_id } = socket.request.account_data
+  if (!socket.handshake.auth?.token) {
+    socket.disconnect(true)
+  }    
+
+  const data = await DB.queryRow('select account_id, login from vue3_learning.verify_account($1)', socket.handshake.auth.token)
+
+  if (!data) {
+    socket.disconnect(true)
+  }
+
+  const { account_id } = data
+
+  //const { account_id } = socket.request.account_data
 
   connections.set(parseInt(account_id), socket.id)
 

@@ -14,7 +14,7 @@ alter sequence vue3_learning.items_seq restart;
 insert into vue3_learning.items
 	(title)
 values
-	('Low Quality Sword'),('Common Shield'),('Common Armor'),
+	('Low Quality Sword'),('Low Quality Shield'),('Low Quality Armor'),
 	('Common Sword'),('Common Shield'),('Common Armor'),
 	('Good Sword'),('Good Shield'),('Good Armor'),
 	('Nice Sword'),('Nice Shield'),('Nice Armor'),

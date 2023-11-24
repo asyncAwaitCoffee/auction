@@ -34,7 +34,13 @@ export default createStore({
             }
             
             const URL = `${adress}/auction/buy?lot_id=${lot.lot_id}`
-            const { my_money } = await fetch(URL, {credentials: 'include'})
+            const { my_money } = await fetch(URL, {
+                credentials: 'include',
+                method: 'POST',
+                body: JSON.stringify({candy: localStorage.getItem('candy')}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }})
                 .then(res => res.text())
                 .then(data => JSON.parse(data, parseIntegers))
 
@@ -55,7 +61,13 @@ export default createStore({
         },
         async sellLot(state, {item_id, price, bid_step, quantity}) {
             const URL = `${adress}/auction/sell?item_id=${item_id}&quantity=${quantity}&price=${price}&bid_step=${bid_step}`
-            const { lot_id, need_to_del } = await fetch(URL, {credentials: 'include'})
+            const { lot_id, need_to_del } = await fetch(URL, {
+                credentials: 'include',
+                method: 'POST',
+                body: JSON.stringify({candy: localStorage.getItem('candy')}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }})
                 .then(res => res.text())
                 .then(data => JSON.parse(data, parseIntegers))
 
@@ -72,7 +84,13 @@ export default createStore({
         },
         async cancelLot(state, lot) {
             const URL = `${adress}/auction/cancel?lot_id=${lot.lot_id}`
-            const { need_to_del } = await fetch(URL, {credentials: 'include'})
+            const { need_to_del } = await fetch(URL, {
+                credentials: 'include',
+                method: 'POST',
+                body: JSON.stringify({candy: localStorage.getItem('candy')}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }})
                 .then(res => res.text())
                 .then(data => JSON.parse(data, parseIntegers))
 
@@ -87,7 +105,13 @@ export default createStore({
             }
 
             const URL = `${adress}/auction/bid?lot_id=${lot.lot_id}`
-            const { money_left, error } = await fetch(URL, {credentials: 'include'})
+            const { money_left, error } = await fetch(URL, {
+                credentials: 'include',
+                method: 'POST',
+                body: JSON.stringify({candy: localStorage.getItem('candy')}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }})
                 .then(res => res.text())
                 .then(data => JSON.parse(data, parseIntegers))
 
@@ -103,7 +127,13 @@ export default createStore({
         },
         async favLot(state, lot) {
             const URL = `${adress}/auction/fav?lot_id=${lot.lot_id}`
-            const { need_to_del, error } = await fetch(URL, {credentials: 'include'})
+            const { need_to_del, error } = await fetch(URL, {
+                credentials: 'include',
+                method: 'POST',
+                body: JSON.stringify({candy: localStorage.getItem('candy')}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }})
                 .then(res => res.text())
                 .then(data => JSON.parse(data, parseIntegers))
 
@@ -261,7 +291,14 @@ export default createStore({
             this.commit('setAccountLoading', true)
             const URL = `${adress}/account`
             try {
-                const { login, my_money } = await fetch(URL, {credentials: 'include'})
+                const { login, my_money } = await fetch(URL, {
+                    credentials: 'include',
+                    method: 'POST',
+                    body: JSON.stringify({candy: localStorage.getItem('candy')}),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
                     .then(res => res.text())
                     .then(data => data ? JSON.parse(data, parseIntegers) : {})
 
@@ -277,8 +314,15 @@ export default createStore({
                 return
             }
             this.commit('setPageLoading', true)
-            const URL = `${adress}/auction?limit=20&offset=${this.state.pageNumber * 20}`
-            const { result } = await fetch(URL, {credentials: 'include'})
+            const URL = `${adress}/auction?limit=20&offset=${this.state.pageNumber * 20}`            
+            const { result } = await fetch(URL, {
+                credentials: 'include',
+                method: 'POST',
+                body: JSON.stringify({candy: localStorage.getItem('candy')}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
                 .then(res => res.text())
                 .then(data => data ? JSON.parse(data, parseIntegers) : {})
 
@@ -304,7 +348,14 @@ export default createStore({
 
         async fetchStorage({ commit }) {
             const URL = `${adress}/storage`
-            const { result } = await fetch(URL, {credentials: 'include'})
+            const { result } = await fetch(URL, {
+                credentials: 'include',
+                method: 'POST',
+                body: JSON.stringify({candy: localStorage.getItem('candy')}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
                 .then(res => res.text())
                 .then(data => data ? JSON.parse(data, parseIntegers) : {})
 
@@ -322,7 +373,14 @@ export default createStore({
 
         async fetchProduction({ commit }) {
             const URL = `${adress}/production`
-            const { result } = await fetch(URL, {credentials: 'include'})
+            const { result } = await fetch(URL, {
+                credentials: 'include',
+                method: 'POST',
+                body: JSON.stringify({candy: localStorage.getItem('candy')}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
                 .then(res => res.text())
                 .then(data => data ? JSON.parse(data, parseIntegers) : {})
             

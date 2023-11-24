@@ -21,7 +21,12 @@ export class MySocket {
       return this.#socket
     }
 
-    this.#socket = io(this.#URL, {withCredentials: true})
+    this.#socket = io(this.#URL, {
+      withCredentials: true,
+      auth: {
+        token: localStorage.getItem('candy')
+      }
+    })
 
     this.#socket.on("connect_error", (err) => {
       console.log(`connect_error due to ${err.message}`);
