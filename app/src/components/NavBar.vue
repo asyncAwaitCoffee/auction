@@ -1,0 +1,54 @@
+<template>
+    <nav>
+        <nav-button class="btn home" :route="'/'">Home</nav-button>
+        <nav-button v-if="this.$store.state.login == null"
+            class="btn auth"
+            @click="this.$store.commit('setForm', {form: 'SignUpForm'})"
+        >Sign In</nav-button>
+        <nav-button v-else
+            class="btn auth"
+            @click="signout"
+        >Sign Out</nav-button>
+    </nav>
+</template>
+<script>
+import NavButton from '@/components/UI/NavButton.vue';
+import { parseIntegers } from "@/scripts";
+export default {
+    components: {
+        NavButton
+    },
+    methods: {        
+        async signout() {
+            const URL = `${import.meta.env.VITE_URL}/signout`
+            const { ok } = await fetch(URL, {credentials: 'include'}) // TODO: credentials are not necessary?
+                .then(res => res.text())
+                .then(data => JSON.parse(data, parseIntegers))
+
+            if ( ok ) {
+                this.$store.state.onlyForceLoad = false
+                this.$store.state.pageNumber = 0
+                this.$store.commit('clearLogin')
+                this.$store.dispatch('fetchAuction')
+            }
+        },
+    }
+}
+</script>
+<style scoped>
+nav {
+    background-image: linear-gradient(rgba(139, 176,193, 0.3), rgba(139, 176,193, 1));
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: stretch;
+    width: 100%;
+    border-bottom: 4px solid rgba(16, 83,115, 1);
+}
+.btn {
+    width: 10%;
+}
+.home {
+    margin-right: 70%;
+}
+</style>

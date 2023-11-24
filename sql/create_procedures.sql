@@ -1,0 +1,271 @@
+create or replace procedure vue3_learning.auth_sign_up
+(
+	_login varchar(25),
+	_password_hash char(64),
+	
+	out account_token uuid
+)
+language plpgsql
+security definer												-- ??
+as $$
+declare _account_id bigint;
+begin
+
+	insert into vue3_learning.accounts as a
+		(login, password_hash, my_money)
+	values
+		(_login, _password_hash, 10000)
+	returning a.account_token, a.account_id into account_token, _account_id;
+	
+	insert into vue3_learning.production
+	(account_id, recipe_id, process, progress)
+	values
+	(_account_id, 5, false, 0),
+	(_account_id, 4, false, 0),
+	(_account_id, 6, false, 0),
+	(_account_id, 1, false, 0),
+	(_account_id, 2, false, 0),
+	(_account_id, 3, false, 0);
+
+end;$$;
+
+create or replace procedure vue3_learning.bid_auction_lot
+(
+	_account_id bigint,
+	_lot_id bigint,
+
+	out money_left bigint,
+	out prev_bid bigint,
+	out prev_bidder bigint,
+	out last_bid bigint
+)
+language plpgsql
+security definer												-- ??
+as $$
+begin
+
+with bid as (
+	update vue3_learning.auction as a
+		set current_bid = a.current_bid + a.bid_step,
+			highest_bidder = _account_id
+	from vue3_learning.auction as a_old
+	where a.lot_id = _lot_id
+		and a.highest_bidder <> _account_id
+		and a.lot_id = a_old.lot_id
+		and now() between a.date_start and a.date_end
+	returning a.current_bid, a_old.current_bid as prev_bid, a_old.highest_bidder as prev_bidder
+),
+pay as (
+	update vue3_learning.accounts as a
+		set my_money = a.my_money - bid.current_bid
+	from bid
+	where a.account_id = _account_id
+		and bid.current_bid is not null
+		and a.my_money >= bid.current_bid
+	returning a.my_money, bid.current_bid, bid.prev_bid, bid.prev_bidder
+),
+prev_refund as (
+	update vue3_learning.accounts as a
+		set my_money = a.my_money + pay.prev_bid
+	from pay
+	where a.account_id = pay.prev_bidder
+		and pay.prev_bid is not null
+)
+	select
+		pay.my_money, pay.current_bid, pay.prev_bid, pay.prev_bidder
+	into money_left, last_bid, prev_bid, prev_bidder
+	from pay;
+end;
+$$;
+
+
+create or replace procedure vue3_learning.buy_auction_lot
+(
+	_account_id bigint,
+	_lot_id bigint,
+
+	out my_money bigint
+)
+language plpgsql
+security definer												-- ??
+as $$
+declare _item_id bigint;
+declare _quantity bigint;
+begin
+
+	with lot as (
+		delete
+		from vue3_learning.auction as a
+		where a.lot_id = _lot_id
+		returning 
+			a.item_id,
+			a.price,
+			a.quantity,
+			a.current_bid,
+			a.highest_bidder = _account_id as is_bidder
+	),
+	pay as (
+		update vue3_learning.accounts as a
+			set my_money = a.my_money - lot.price + case when is_bidder then lot.current_bid else 0 end
+		from lot
+		where a.account_id = _account_id
+			and a.my_money >= lot.price
+		returning a.my_money
+	)
+	select
+		lot.item_id,
+		pay.my_money,
+		lot.quantity
+	into _item_id, my_money, _quantity
+	from lot
+		left join pay
+			on true;
+			
+	if _item_id is null or my_money is null
+		then rollback;
+	end if;	
+	
+	if found then
+		call vue3_learning.add_item_to_storage(_account_id, _item_id, _quantity);
+	end if;
+end;
+$$;
+
+create or replace procedure vue3_learning.sell_auction_lot
+(
+	_account_id bigint,
+	_item_id bigint,
+	_price bigint,
+	_bid_step bigint,
+	_quantity bigint,
+	
+	out lot_id bigint,
+	out need_to_del boolean
+)
+language plpgsql
+security definer												-- ??
+as $$
+begin
+
+	update vue3_learning.storage as s
+		set quantity = s.quantity - _quantity
+	where s.account_id = _account_id
+		and s.item_id = _item_id
+		and s.quantity - _quantity >= 0
+	returning s.quantity < 1 into need_to_del;
+
+	if found then
+		insert into vue3_learning.auction as a
+			(item_id, price, quantity, bid_step, current_bid, date_start, date_end, lot_owner, highest_bidder)
+		values
+			(_item_id, _price, _quantity, _bid_step, 0, now(), now()::timestamp + '10 day'::interval, _account_id, -2)
+		returning a.lot_id into lot_id;
+	end if;
+	
+	delete from vue3_learning.storage as s
+	where need_to_del
+		and s.account_id = _account_id
+		and s.item_id = _item_id;
+end;
+$$;
+
+create or replace procedure vue3_learning.cancel_auction_lot
+(
+	_account_id bigint,
+	_lot_id bigint,
+	
+	out need_to_del boolean
+)
+language plpgsql
+security definer												-- ??
+as $$
+declare _item_id bigint;
+declare _quantity bigint;
+begin
+	delete from vue3_learning.auction as a
+	where a.lot_id = _lot_id
+		and a.lot_owner = _account_id
+	returning item_id, quantity, true into _item_id, _quantity, need_to_del;
+	
+	if found then
+		call vue3_learning.add_item_to_storage(_account_id, _item_id, _quantity);
+	end if;
+end;
+$$;
+
+create or replace procedure vue3_learning.complete_craft
+(
+	_account_id bigint,
+	_production_id bigint
+)
+language plpgsql
+security definer												-- ??
+as $$
+declare _item_id bigint;
+declare _quantity bigint;
+begin
+	update vue3_learning.production as p
+		set process = false,
+			progress = 0
+	from vue3_learning.recipes as r
+	where r.recipe_id = p.recipe_id
+		and p.production_id = _production_id
+	returning r.item_id, r.quantity into _item_id, _quantity;
+	
+	if found then
+		call vue3_learning.add_item_to_storage(_account_id, _item_id, _quantity);
+	end if;
+end;
+$$;
+
+create or replace procedure vue3_learning.add_item_to_storage
+(
+	_account_id bigint,
+	_item_id bigint,
+	_quantity bigint
+)
+language plpgsql
+security definer												-- ??
+as $$ begin
+
+	insert into vue3_learning.storage as s
+		(account_id, item_id, quantity)
+	values
+		(_account_id, _item_id, 1)
+	on conflict (account_id, item_id)
+	do update
+		set quantity = s.quantity + _quantity
+	where s.account_id = _account_id
+		and s.item_id = _item_id;
+end;
+$$;
+
+create or replace procedure vue3_learning.add_item_to_fav
+(
+	_account_id bigint,
+	_lot_id bigint,
+	
+	out need_to_del boolean
+)
+language plpgsql
+security definer												-- ??
+as $$ begin
+
+	perform * from vue3_learning.favorites as f
+	where f.account_id = _account_id
+		and f.lot_id = _lot_id;
+		
+	if found then
+		delete from vue3_learning.favorites as f
+			where f.account_id = _account_id
+				and f.lot_id = _lot_id;
+				
+		select true into need_to_del;
+	else
+		insert into vue3_learning.favorites as f
+			(account_id, lot_id)
+		values
+			(_account_id, _lot_id);
+	end if;
+end;
+$$;
