@@ -30,38 +30,25 @@ export default {
         async submit() {
             this.$store.commit('clearForm')
 
-            console.log('---sign in---')
-            console.log(import.meta.env.VITE_URL)
-            console.log('---sign in---')
-
             const URL = `${import.meta.env.VITE_URL}/${this.path}?login=${this.login}&password=${this.password}`
-            const { ok, error } = await fetch(URL, {credentials: 'include'})
+            const { ok, error, candy } = await fetch(URL, {credentials: 'include'})
                 .then(res => res.text())
                 .then(data => JSON.parse(data, parseIntegers))
 
             if ( ok ) {
-                console.log('--- ok ---')
+                console.log('candy:', candy)
                 this.$store.commit('setAccountLoading', true)
-                console.log('--- 1 ---')
                 this.$store.commit('setPageLoading', true)
-                console.log('--- 2 ---')
                 this.$store.state.pageNumber = 0
                 this.$store.state.onlyForceLoad = false
                 
                 this.$store.commit('clearLogin')
-                console.log('--- 3 ---')
                 await this.$store.dispatch('fetchAccountData')
-                console.log('--- 4 ---')
                 this.$store.commit('setLogin', this.login)
-                console.log('--- 5 ---')
                 this.$store.commit('setSocket')
-                console.log('--- 6 ---')
                 this.$store.dispatch('fetchAuction')
-                console.log('--- 7 ---')
                 this.$store.dispatch('fetchProduction')
-                console.log('--- 8 ---')
                 this.$store.dispatch('fetchStorage')
-                console.log('--- 9 ---')
             }
 
             if (error) {

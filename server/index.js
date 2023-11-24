@@ -23,8 +23,8 @@ app.get('/signup', async (req, res) => {
     const { login, password } = req.query
     const { account_token } = await DB.queryRow('call vue3_learning.auth_sign_up($1, $2, null)', login, password)
   
-    res.cookie("test", account_token, {httpOnly: true, maxAge: 4 * 60 * 60 * 1000, sameSite: "none", secure: true })  
-    res.send({ok: true})
+    //res.cookie("test", account_token, {httpOnly: true, maxAge: 4 * 60 * 60 * 1000, sameSite: "none", secure: true })  
+    res.send({ok: true, candy: account_token})
 
   } catch(error) {
     console.error(error)
@@ -38,13 +38,8 @@ app.get('/signin', async (req, res) => {
     const { login, password } = req.query
     const { account_token } = await DB.queryRow('select * from vue3_learning.get_account_token($1, $2)', login, password)
   
-    res.cookie("test", account_token, {httpOnly: true, maxAge: 4 * 60 * 60 * 1000 })
-
-    console.log('--- signin get cookie ---')
-    console.log(res)
-    console.log('--- signin get cookie ---')
-
-    res.send({ok: true})
+    //res.cookie("test", account_token, {httpOnly: true, maxAge: 4 * 60 * 60 * 1000 })
+    res.send({ok: true, candy: account_token})
 
   } catch(error) {
     console.error(error)
