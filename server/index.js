@@ -78,7 +78,7 @@ app.post('/auction/bid', async (req, res) => {
 
 
     if (!last_bid) {
-      res.send({ error: true })
+      res.send({ error: { money_left, last_bid, prev_bid, prev_bidder } })
       return
     }
     const prev_bidder_socket_id = connections.get(parseInt(prev_bidder))
@@ -88,7 +88,7 @@ app.post('/auction/bid', async (req, res) => {
 
     io.emit("bid_refresh", JSON.stringify({ lot_id, last_bid }))
 
-    res.send({ money_left })
+    res.send({ ok: true, money_left })
 })
 
 app.post('/auction/buy', async (req, res) => {

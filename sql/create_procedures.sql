@@ -52,7 +52,7 @@ with bid as (
 	where a.lot_id = _lot_id
 		and a.highest_bidder <> _account_id
 		and a.lot_id = a_old.lot_id
-		and now() between a.date_start and a.date_end
+		--and now() between a.date_start and a.date_end
 	returning a.current_bid, a_old.current_bid as prev_bid, a_old.highest_bidder as prev_bidder
 ),
 pay as (

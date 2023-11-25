@@ -15,14 +15,14 @@ alter sequence vue3_learning.items_seq restart;
 insert into vue3_learning.items
 	(title)
 values
-	('Low Quality Sword'),('Low Quality Shield'),('Low Quality Armor'),
-	('Common Sword'),('Common Shield'),('Common Armor'),
-	('Good Sword'),('Good Shield'),('Good Armor'),
-	('Nice Sword'),('Nice Shield'),('Nice Armor'),
-	('Great Sword'),('Great Shield'),('Great Armor'),
-	('Legendary Sword'),('Legendary Shield'),('Legendary Armor'),
-	('Marvelous Sword'),('Marvelous Shield'),('Marvelous Armor'),
-	('Mythical Sword'),('Mythical Shield'),('Mythical Armor');
+	('Low Quality Rectangle'),('Low Quality Square'),('Low Quality Cube'),
+	('Common Rectangle'),('Common Square'),('Common Cube'),
+	('Good Rectangle'),('Good Square'),('Good Cube'),
+	('Nice Rectangle'),('Nice Square'),('Nice Cube'),
+	('Great Rectangle'),('Great Square'),('Great Cube'),
+	('Legendary Rectangle'),('Legendary Square'),('Legendary Cube'),
+	('Marvelous Rectangle'),('Marvelous Square'),('Marvelous Cube'),
+	('Mythical Rectangle'),('Mythical Square'),('Mythical Cube');
 	
 -----------------------------------------------------------------------	recipes
 truncate table vue3_learning.recipes;
@@ -31,12 +31,12 @@ alter sequence vue3_learning.recipes_seq restart;
 insert into vue3_learning.recipes
 	(title, item_id, materials, step, speed, quantity)	--materials { item_id : quantity }
 values
-	('Recipe: Sword', 1, '{"100": 5}', 10, 500, 1),
-	('Recipe: Shield', 2, '{"100": 5}', 15, 750, 1),
-	('Recipe: Armor', 3, '{"100": 5}', 8, 250, 1),
-	('Recipe: Other Sword', 4, '{"1": 1}', 22, 1000, 2),
-	('Recipe: Other Shield', 5, '{"2": 1}', 31, 1500, 2),
-	('Recipe: Other Armor', 6, '{"3": 1}', 18, 500, 2);
+	('Recipe: Low Quality Rectangle', 1, '{"100": 5}', 10, 500, 1),
+	('Recipe: Low Quality Square', 2, '{"100": 5}', 15, 750, 1),
+	('Recipe: Low Quality Cube', 3, '{"100": 5}', 8, 250, 1),
+	('Recipe: Common Rectangle', 4, '{"1": 1}', 22, 1000, 2),
+	('Recipe: Common Square', 5, '{"2": 1}', 31, 1500, 2),
+	('Recipe: Common Cube', 6, '{"3": 1}', 18, 500, 2);
 	
 -----------------------------------------------------------------------	auction
 truncate table vue3_learning.auction;

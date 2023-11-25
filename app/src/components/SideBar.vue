@@ -43,9 +43,12 @@ export default {
         display: flex;
         flex-flow: column;
         flex-wrap: nowrap;
-        border-top: 1px solid rgba(16, 83,115, 1);
-        border-right: 1px solid rgba(16, 83,115, 1);
-        border-bottom: 1px solid rgba(16, 83,115, 1);
+        border-bottom: 4px solid var(--color-five);
+        background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(191, 226, 242, 0.7) 15%, rgba(139, 176, 193, 1));
+        padding: 5px 0;
+        min-height: 40px;
+
+        overflow: scroll;
 
         @media screen and (max-width: 900px) {
             flex-flow: row;
@@ -53,9 +56,9 @@ export default {
             width: 80%;
         }
     }
-
-    .active-btn {
-        background-color: rgba(16, 83,115, 0.3);
-        color: rgba(241, 237,232, 1);
+    nav::-webkit-scrollbar {
+        display: none;
     }
+
+
 </style>
