@@ -35,10 +35,12 @@ export default {
 }
 
 :root {
-  --color-one: rgba(79, 78, 134, 1);
-  --color-two: rgba(176, 123, 193, 1);
-  --color-three: rgba(230, 145, 70, 1);
-  --color-four: rgba(212, 209, 44, 1);
+  --color-one: rgba(194, 201,234, 1);
+  --color-two: rgba(96, 134,226, 1);
+  --color-three: rgba(62, 100,152, 1);
+  --color-four: rgba(52, 87,95, 1);
+  --color-five: rgba(34, 55,56, 1);
+  --gap: 5px;
 }
 
 button {
@@ -55,7 +57,7 @@ html, body {
   height: 100svh;
   background-image: linear-gradient(90deg, var(--color-one), rgba(255, 255, 255));
   display: grid;
-  gap: 5px;
+  gap: var(--gap);
   grid-template-columns: 1fr 10fr;
   grid-template-rows: 1fr 20fr;
   grid-template-areas:
@@ -81,12 +83,8 @@ html, body {
   display: flex;
   flex-flow: column;
   flex-wrap: nowrap;
-  gap: 1px;
+  gap: var(--gap);
   padding: 1px 1px 1px 0;
-  background-image: linear-gradient(rgba(139, 176,193, 1), rgba(191, 226, 242, 0.7) 15%, rgba(255, 255, 255, 0.3));
-  border-top: 1px solid rgba(16, 83,115, 1);
-  border-right: 1px solid rgba(16, 83,115, 1);
-  border-bottom: 1px solid rgba(16, 83,115, 1);
 
   @media screen and (max-width: 900px) {
     flex-flow: row;

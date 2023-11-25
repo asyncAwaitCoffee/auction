@@ -17,8 +17,15 @@ export default {
         text-decoration: underline;
     }
     button {
-        color: black;
+        color: var(--color-one);
         text-decoration: none;
-        width: 25%;
+        width: 15%;
+        position: relative;
+        isolation: isolate;
+
+        @media screen and (max-width: 900px) {
+            width: 30%;
+        }
     }
+    
 </style>

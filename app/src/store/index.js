@@ -121,6 +121,7 @@ export default createStore({
 
             if (error) {
                 console.error(`error: ${error}`)
+                console.error(error)
             }
 
             state.money = money_left

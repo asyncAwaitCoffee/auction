@@ -97,6 +97,10 @@ export default {
     flex-wrap: wrap;
     padding: 1%;
 
+    @media screen and (min-width: 1500px) {
+        width: 19.5%;
+    }
+
     @media screen and (max-width: 1200px) {
         width: 32.8%;
     }
@@ -113,13 +117,17 @@ export default {
     background-color: rgba(255, 255, 255, 0.95);
     transform: translateY(1%);
     z-index: 99;
-    box-shadow: 0 10px 5px 10px rgba(80, 147,179, 0.3);
+    box-shadow: 0 10px 5px 10px rgba(80, 147, 179, 0.3);
 }
 
 .item-name {
     height: 10%;
     width: 100%;
-    border-bottom: 1px solid rgba(80, 147,179, 0.3);
+    border-bottom: 1px solid rgba(80, 147, 179, 0.3);
+    display: flex;
+    flex-flow: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
 }
 .item-image {
     height: 80%;
@@ -130,9 +138,18 @@ export default {
     height: 80%;
     width: 50%;
     padding: 15px;
+    overflow: hidden;
+    height: 80%;
+    width: 50%;
 }
 .item-text div {
-    background-color: rgba(128, 128, 128, 0.2);
+    padding-left: 5px;
+    border-left: 1px solid rgba(80, 147, 179, 0.3);
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    white-space: pre-wrap;
 }
 .item-price {
     height: 100%;
@@ -191,14 +208,16 @@ footer {
 }
 
 .bidded {
-    background-color: var(--color-three);
+    background-color: var(--color-one);
     color: black;
 }
 .no.bidded {
     background-image: linear-gradient(0.20turn, red, red 50%, var(--color-three), var(--color-three) 50%);
 }
 .faved {
-    background-color: var(--color-three);
+    background-color: var(--color-one);
     color: black;
+    
 }
+
 </style>

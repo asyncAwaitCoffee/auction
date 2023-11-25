@@ -1,6 +1,6 @@
 <template>
     <nav>
-        <nav-button class="btn home" :route="'/'">Home</nav-button>
+        <!-- <nav-button class="btn home" :route="'/'">Home</nav-button> -->
         <nav-button v-if="this.$store.state.login == null"
             class="btn auth"
             @click="this.$store.commit('setForm', {form: 'SignUpForm'})"
@@ -41,17 +41,14 @@ nav {
     background-image: linear-gradient(rgba(139, 176,193, 0.3), rgba(139, 176,193, 1));
     display: flex;
     flex-flow: row;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: stretch;
     width: 100%;
-    border-bottom: 4px solid rgba(16, 83,115, 1);
+    min-height: 40px;
+    border-bottom: 4px solid var(--color-five);
     overflow: hidden;
 }
-.btn {
-    width: 10%;
-    position: relative;
-    isolation: isolate;
-}
+
 .home {
     margin-right: 70%;
 }
@@ -65,6 +62,6 @@ nav {
     width: 100%;
     height: 100%;
     transform: skew(0.2turn);
-    background-color: var(--color-four);
+    background-color: var(--color-five);
 }
 </style>
