@@ -2,7 +2,7 @@
 Vue.js | Express.js | Socket.io | PostgreSQL
 
 # Brief description
-Auction app where you can buy, sell and craft items.
+Auction app where you can buy, sell and even create items.
 And since it is an auction you can make bids.
 
 Accounts and items are stored in PostgreSQL DB.
