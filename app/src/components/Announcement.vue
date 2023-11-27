@@ -1,11 +1,11 @@
 <template>
-    <section v-if="this.$store.state.activeForm === 'Announcement' && this.noCandy" @click="this.$store.commit('clearForm')">
+    <section v-if="page.activeForm === 'Announcement' && this.noCandy" @click="this.$store.commit('page/clearForm')">
         <div @click.stop>
           <article>
             <p>Hello and welcome to my Auction website!</p>
             <p>This site is a practice ground for new skills and implementations.</p>
             <p>Please allow a few seconds for the web service to wake up and load data.</p>
-            <p>You can sign up or use precreated account { test : 123 }.</p>
+            <p>You can sign up or use a pre-created account { test : 123 }.</p>
             <p>Have a great day!</p>
           </article>
         </div>
@@ -13,11 +13,16 @@
 </template>
     
 <script>
+import { mapState } from 'vuex';
+
 export default {
   data() {
     return {
       noCandy: !localStorage.candy
     }
+  },
+  computed: {
+    ...mapState(["page"])
   }
 }    
 </script>
@@ -57,13 +62,14 @@ export default {
     }
 
     @keyframes bounce-in {
-      50% {
-        opacity: 0;
+      0% {
+        opacity: 0.5;
       }
     }
 
     article {
-      border-left: 4px solid white;
+      border-left: 4px solid var(--color-three);
+      color: var(--color-one);
       border-radius: 5px;
       padding-left: 20px;
     }

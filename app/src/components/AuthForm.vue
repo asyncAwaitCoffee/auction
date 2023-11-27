@@ -26,9 +26,10 @@ export default {
             path: 'signin'
         }
     },
+
     methods: {
         async submit() {
-            this.$store.commit('clearForm')
+            this.$store.commit('page/clearForm')
 
             const URL = `${import.meta.env.VITE_URL}/${this.path}?login=${this.login}&password=${this.password}`
             const { ok, error, candy } = await fetch(URL, {credentials: 'include'})
@@ -36,17 +37,18 @@ export default {
                 .then(data => JSON.parse(data, parseIntegers))
 
             if ( ok ) {
-                this.$store.commit('setLogin', this.login)
+                this.$store.commit('account/setLogin', this.login)
                 localStorage.setItem('candy', candy);
 
-                this.$store.commit('setAccountLoading', true)
-                this.$store.commit('setPageLoading', true)
+                this.$store.commit('account/setAccountLoading', true)
+                this.$store.commit('page/setPageLoading', true)
                 this.$store.state.pageNumber = 0
                 this.$store.state.onlyForceLoad = false
                 
-                this.$store.commit('clearLogin')
+                this.$store.commit('account/clearLogin')
+                this.$store.commit('clearAuction')
                 await this.$store.dispatch('fetchAccountData')
-                this.$store.commit('setSocket')
+                this.$store.commit('account/setSocket')
                 this.$store.dispatch('fetchAuction')
                 this.$store.dispatch('fetchProduction')
                 this.$store.dispatch('fetchStorage')
@@ -60,7 +62,7 @@ export default {
         },
 
         clear() {
-            this.$store.commit('clearForm')
+            this.$store.commit('page/clearForm')
             this.login = null
             this.password = null
         },

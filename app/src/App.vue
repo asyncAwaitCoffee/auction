@@ -5,10 +5,15 @@ import MainContent from '@/components/MainContent.vue';
 import SideSubBar from '@/components/SideSubBar.vue';
 import InfoBlock from '@/components/InfoBlock.vue';
 
+import { mapState } from 'vuex';
+
 export default {
   components: {
     NavBar, SideBar, MainContent, SideSubBar, InfoBlock
   },
+  computed: {
+    ...mapState(["page"])
+  }
 }
 </script>
 
@@ -16,11 +21,10 @@ export default {
   <div class="app">
     <nav-bar class="nav-bar"></nav-bar>
     <section class="side-content">
-      <!-- <info-block></info-block> -->
       <side-bar class="side-bar"></side-bar>
 <!--       <side-sub-bar class="side-sub-bar"></side-sub-bar> -->
     </section>
-    <section :class="{'main-content': true, 'content__loading': this.$store.state.isPageLoading}">
+    <section :class="{'main-content': true, 'content__loading': page.isPageLoading}">
       <main-content></main-content>
     </section>
   </div>

@@ -1,15 +1,19 @@
 <template>
-    <section :class="{'content__loading': this.$store.state.isAccountLoading && this.$store.state.login != null}">
-        <nav-button class="info" v-if="$store.state.money != null">Transactions</nav-button>
-        <nav-button class="info" v-if="$store.state.money != null">{{ $store.state.money }}G</nav-button>
+    <section :class="{'content__loading': account.isAccountLoading && account.login != null}">
+        <nav-button class="info" v-if="account.money != null">Transactions</nav-button>
+        <nav-button class="info" v-if="account.money != null">{{ account.money }}G</nav-button>
     </section>
 </template>
 <script>
 import NavButton from '@/components/UI/NavButton.vue';
+import { mapState } from 'vuex';
 
 export default {
     components: {
         NavButton
+    },
+    computed: {
+        ...mapState(["account"])
     }
 }
 </script>
