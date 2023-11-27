@@ -1,40 +1,42 @@
 <template>
-    <section :class="{'content__loading': this.$store.state.isAccountLoading}">
-            <h3 :class="{'wait': $store.state.money == null}">{{ this.$store.state.login }}</h3>
-            <h1 v-if="$store.state.money != null">{{ $store.state.money }}G</h1>
+    <section :class="{'content__loading': this.$store.state.isAccountLoading && this.$store.state.login != null}">
+        <nav-button class="info" v-if="$store.state.money != null">Transactions</nav-button>
+        <nav-button class="info" v-if="$store.state.money != null">{{ $store.state.money }}G</nav-button>
     </section>
 </template>
 <script>
+import NavButton from '@/components/UI/NavButton.vue';
+
 export default {
-    props: {}
+    components: {
+        NavButton
+    }
 }
 </script>
 <style scoped>
 section {
-    height: 10%;
-    background-image: linear-gradient(rgba(139, 176,193, 1), rgba(191, 226, 242, 0.7) 15%, rgba(255, 255, 255, 0.3));
+    width: 50%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: space-evenly;
+    justify-content: flex-end;
     justify-items: center;
     align-items: center;
-    border-bottom: 4px solid var(--color-five);
+
+    @media screen and (max-width: 900px) {
+        display: none;
+    }
 }
 
 h3, h1 {    
     text-align: center;
 }
 
-@media screen and (max-width: 900px) {
-    section {
-        flex-flow: row;
-        height: 100%;
-        width: 20%;
-    }
-
-    h3 {
-        display: none;
-    }
+.info {
+    color: var(--color-five);
+    border-right: 2px solid var(--color-five);
+    min-width: 20%;
 }
+
+
 </style>

@@ -19,12 +19,13 @@ export default {
     button {
         color: var(--color-one);
         text-decoration: none;
-        width: 15%;
         position: relative;
-        isolation: isolate;
+        isolation: isolate;        
+        font-size: clamp(12px, 1.4vmin, 25px);
+        white-space: nowrap;
 
         @media screen and (max-width: 900px) {
-            width: 30%;
+            width: 50%;
         }
     }
     

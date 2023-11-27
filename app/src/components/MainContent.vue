@@ -12,16 +12,18 @@
         <lot-form v-if="this.$store.state.activeForm === 'LotForm'">
         </lot-form>
         <auth-form v-if="this.$store.state.activeForm === 'SignUpForm'"></auth-form>
+        <announcement></announcement>
     </section>
 </template>
 <script>
 import ItemCard from '@/components/ItemCard.vue';
 import LotForm from '@/components/LotForm.vue';
 import AuthForm from '@/components/AuthForm.vue';
+import Announcement from '@/components/Announcement.vue';
 
 export default {
     components: {
-        ItemCard, LotForm, AuthForm
+        ItemCard, LotForm, AuthForm, Announcement
     },
     data() {
         return {

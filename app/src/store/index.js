@@ -2,9 +2,14 @@ import { createStore } from "vuex";
 import { Item, Lot, Storage, parseIntegers } from "@/scripts";
 import { MySocket } from "../socket";
 
+import fetchData from "./modules/fetchData"
+
 const adress = import.meta.env.VITE_URL
 
 export default createStore({
+    modules: {
+        fetchData
+    },
     state: {
         loc: 'auction',
         money: null,
@@ -17,7 +22,7 @@ export default createStore({
 
         login: null,
 
-        activeForm: null,
+        activeForm: 'Announcement',
         formData: null,
 
         socket: null,
@@ -26,6 +31,7 @@ export default createStore({
         isPageLoading: true,
         pageNumber: 0,
         onlyForceLoad: false,
+        loadLimit: 25
     },
     mutations: {
         async buyLot(state, lot) {
@@ -76,7 +82,8 @@ export default createStore({
                 .then(res => res.text())
                 .then(data => JSON.parse(data, parseIntegers))
 
-            const stored = state.storage.get(item_id)
+            const stored = state.storage.get(item_id)            
+            stored.selling = false
             
             if (need_to_del) {
                 state.lots.set(lot_id, new Lot(stored.item, stored.img, stored.text, lot_id, price, bid_step, quantity))
@@ -85,6 +92,9 @@ export default createStore({
             }
 
             stored.quantity -= quantity
+            if (stored.quantity < 1) {
+                state.storage.delete(item_id)
+            }
             state.lots.set(lot_id, new Lot(stored.item, stored.img, stored.text, lot_id, price, bid_step, quantity))
         },
         async cancelLot(state, lot) {
@@ -296,34 +306,14 @@ export default createStore({
     },
 
     actions: {
-        async fetchAccountData({ commit }) {
-            this.commit('setAccountLoading', true)
-            const URL = `${adress}/account`
-            try {
-                const { login, my_money } = await fetch(URL, {
-                    credentials: 'include',
-                    method: 'POST',
-                    body: JSON.stringify({candy: localStorage.getItem('candy')}),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                    .then(res => res.text())
-                    .then(data => data ? JSON.parse(data, parseIntegers) : {})
-
-                commit('setAccountData', {login, my_money})
-            } catch(error) {
-                console.log(error)
-            }
-            this.commit('setAccountLoading', false)
-        },
+        
         
         async fetchAuction({ commit }) {
             if (this.state.onlyForceLoad) {
                 return
             }
             this.commit('setPageLoading', true)
-            const URL = `${adress}/auction?limit=20&offset=${this.state.pageNumber * 20}`            
+            const URL = `${adress}/auction?limit=${this.state.loadLimit}&offset=${this.state.pageNumber * this.state.loadLimit}`            
             const { result } = await fetch(URL, {
                 credentials: 'include',
                 method: 'POST',

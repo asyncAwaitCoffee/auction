@@ -16,7 +16,7 @@ export default {
   <div class="app">
     <nav-bar class="nav-bar"></nav-bar>
     <section class="side-content">
-      <info-block></info-block>
+      <!-- <info-block></info-block> -->
       <side-bar class="side-bar"></side-bar>
 <!--       <side-sub-bar class="side-sub-bar"></side-sub-bar> -->
     </section>
@@ -32,14 +32,58 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  min-width: 0;
+  border: 0;
+}
+
+form {
+    position: fixed;
+    background-color: rgba(41, 63,73, 0.3);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 99;
+}
+fieldset {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    width: 50%;
+    height: auto;
+    padding: 50px;
+    background-color: var(--color-pop);;
+    border-radius: 15px;
+    box-shadow: 0 0 15px 15px var(--color-pop);
+}
+input {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+input[type="submit"] {
+    background-color: rgba(139, 176,193, 1);
+    font-size: 1rem;
+}
+input[type="text"][disabled] {
+  color: white;
 }
 
 :root {
-  --color-one: rgba(194, 201,234, 1);
-  --color-two: rgba(96, 134,226, 1);
-  --color-three: rgba(62, 100,152, 1);
-  --color-four: rgba(52, 87,95, 1);
-  --color-five: rgba(34, 55,56, 1);
+  --color-one: #bbd0db;
+  --color-two: #76a5bc;
+  --color-three: #4a7f98;
+  --color-four: #305b74;
+  --color-five: #1e3b4f;
+  --color-six: #152028;
+
+  --color-pop: rgba(25, 39, 45, 0.7);
+  
   --gap: 5px;
 }
 

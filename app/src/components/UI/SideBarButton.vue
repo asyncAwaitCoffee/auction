@@ -8,37 +8,38 @@ export default {}
     
 <style scoped>
     button:hover {
-        background-color: rgba(16, 83, 115, 0.3);
-        color: rgba(241, 237,232, 1);
+        background-color: var(--color-six);
+        color: white;
     }
     .active-btn:hover {
-        background-color: rgba(16, 83, 115, 0.3);
-        color: rgba(241, 237,232, 1);
+        color: white
     }
     button {
         color: black;
         text-decoration: none;
+        font-size: clamp(12px, 1.4rem, 14px);
         padding: 1%;
         flex: 1 1 auto;
         position: relative;
         transition: all 0.15s linear;
         white-space: nowrap;
-        border-right: 4px solid rgb(255, 255, 255, 0);
+        border-left: 10px solid var(--color-six);
 
         @media screen and (max-width: 900px) {
-            border-right: none;
+            border-left: none;
             border-bottom: 4px solid rgb(255, 255, 255, 0);
         }
     }
     .active-btn {
-        background-color: rgba(16, 83,115, 1);
-        color: rgba(241, 237,232, 1);       
-        border-right: 4px solid var(--color-three);
+        background-color: var(--color-five);
+        color: rgba(241, 237,232, 1);
+        border-left: none;
+        border-right: 10px solid var(--color-six);
         z-index: 1;
 
         @media screen and (max-width: 900px) {
             border-right: none;       
-            border-bottom: 4px solid var(--color-three);
+            border-bottom: 4px solid var(--color-six);
         }
     }
 </style>
