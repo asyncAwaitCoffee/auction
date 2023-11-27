@@ -37,7 +37,7 @@
                 <card-button
                     v-if="account.loc === 'storage'"
                     :class="{'wait': $props.box.selling === true}"
-                    @click="$store.commit('setForm', {form: 'LotForm', data: $props.box})"
+                    @click="$store.commit('page/setForm', {form: 'LotForm', data: $props.box})"
                 >Sell</card-button>
                 <card-button
                     v-if="account.loc === 'production'"
