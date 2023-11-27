@@ -40,6 +40,7 @@ export const fetchAuction = async ({ commit, state }) =>
         })
             .then(res => res.text())
             .then(data => data ? JSON.parse(data, parseIntegers) : {})
+        
         result.forEach(
             async lot => {
                 const {thumbnailUrl, title} = await fetch(`https://jsonplaceholder.typicode.com/photos/${lot.item.item_id}`)

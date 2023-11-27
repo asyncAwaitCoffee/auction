@@ -42,8 +42,8 @@ export default {
 
                 this.$store.commit('account/setAccountLoading', true)
                 this.$store.commit('page/setPageLoading', true)
-                this.$store.state.pageNumber = 0
-                this.$store.state.onlyForceLoad = false
+                this.$store.state.page.onlyForceLoad = false
+                this.$store.state.page.pageNumber = 0
                 
                 this.$store.commit('account/clearLogin')
                 this.$store.commit('clearAuction')
