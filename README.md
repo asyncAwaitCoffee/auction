@@ -1,5 +1,5 @@
 # Auction
-Vue.js 3 | Express.js | Socket.io
+Vue.js | Express.js | Socket.io | PostgreSQL
 
 # Brief description
 Auction app where you can buy, sell and craft items.
