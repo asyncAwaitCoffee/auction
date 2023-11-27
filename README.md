@@ -15,5 +15,5 @@ The project is still under developmnet, so some functionality may not work at th
 - Buy
 - Sell
 - Bid (with notification to all and refund to previous bidder)
-- Craft (with timer)
+- Craft (timer)
 - Add to favorites
