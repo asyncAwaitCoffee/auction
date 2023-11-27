@@ -32,14 +32,14 @@ export default {
             this.clear()
         },
         clear() {
-            this.$store.commit('clearForm')
+            this.$store.commit('page/clearForm')
             this.price = null
             this.quantity = null
         },
     },
     computed: {
         box() {
-            return this.$store.state.formData
+            return this.$store.state.page.formData
         }
     }
 }
