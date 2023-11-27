@@ -1,17 +1,17 @@
 <template>
     <nav>
-        <side-menu-button @changeContent="changeContent($event)" :content="'a'">item 1</side-menu-button>
-        <side-menu-button @changeContent="changeContent($event)" :content="'b'">item 2</side-menu-button>
-        <side-menu-button @changeContent="changeContent($event)" :content="'c'">item 3</side-menu-button>
-        <side-menu-button @changeContent="changeContent($event)" :content="'d'">item 4</side-menu-button>
+        <side-bar-button @changeContent="changeContent($event)" :content="'a'">item 1</side-bar-button>
+        <side-bar-button @changeContent="changeContent($event)" :content="'b'">item 2</side-bar-button>
+        <side-bar-button @changeContent="changeContent($event)" :content="'c'">item 3</side-bar-button>
+        <side-bar-button @changeContent="changeContent($event)" :content="'d'">item 4</side-bar-button>
     </nav>
 </template>
     
 <script>
-import SideMenuButton from '@/components/UI/SideMenuButton.vue';
+import SideBarButton from '@/components/UI/SideBarButton.vue';
 export default {
     components: {
-        SideMenuButton
+        SideBarButton
     },
     methods: {        
         changeContent(event) {

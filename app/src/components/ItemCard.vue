@@ -29,18 +29,19 @@
                 >Fav</card-button>
                 <card-button
                     v-if="$store.state.loc === 'lots'"
-                    @click="$store.commit('cancelLot', $props.box)"
-                >Cancel</card-button>
+                    @click="$store.commit('cancelLot', $props.box), $event.target.classList.add('wait')"
+                >Stop</card-button>
                 <card-button
                     v-if="$store.state.loc === 'storage'"
                 >Use</card-button>
                 <card-button
                     v-if="$store.state.loc === 'storage'"
+                    :class="{'wait': $props.box.selling === true}"
                     @click="$store.commit('setForm', {form: 'LotForm', data: $props.box})"
                 >Sell</card-button>
                 <card-button
                     v-if="$store.state.loc === 'production'"
-                >Status</card-button>
+                >State</card-button>
                 <card-button
                     v-show="$store.state.loc === 'production' && $props.box.process"
                     @click="$store.commit('abortCraft', $props.box)"
@@ -78,7 +79,7 @@ export default {
             return this.$props.box.progress
         },
         getBarProgress() {
-            return `background-image: linear-gradient(0.25turn, rgba(16, 83,115, 1), rgba(16, 83,115, 1) ${this.$props.box.progress}%, red, red 100%)`
+            return `background-image: linear-gradient(0.25turn, var(--color-three), var(--color-three) ${this.$props.box.progress}%, red, red 100%)`
         }
     },
 }
@@ -90,7 +91,7 @@ export default {
     border: 1px solid black;
     margin-top: 0.4%;
     margin-left: 0.4%;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.6);
     transition: 0.5s all;
     display: flex;
     flex-direction: row;
@@ -162,12 +163,12 @@ export default {
 }
 
 p.small {
-    font-size: 1.4rem;
+    font-size: clamp(12px, 1.4rem, 20px);
     background-color: rgba(255, 255, 255, 0.3);
 }
 
 p.large {
-    font-size: 1.8rem;
+    font-size: clamp(16px, 1.6rem, 30px);
 }
 
 footer {

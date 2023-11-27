@@ -36,6 +36,7 @@ export default {
                 .then(data => JSON.parse(data, parseIntegers))
 
             if ( ok ) {
+                this.$store.commit('setLogin', this.login)
                 localStorage.setItem('candy', candy);
 
                 this.$store.commit('setAccountLoading', true)
@@ -45,7 +46,6 @@ export default {
                 
                 this.$store.commit('clearLogin')
                 await this.$store.dispatch('fetchAccountData')
-                this.$store.commit('setLogin', this.login)
                 this.$store.commit('setSocket')
                 this.$store.dispatch('fetchAuction')
                 this.$store.dispatch('fetchProduction')
@@ -60,6 +60,7 @@ export default {
         },
 
         clear() {
+            this.$store.commit('clearForm')
             this.login = null
             this.password = null
         },
