@@ -42,8 +42,8 @@ export default {
 
             if ( ok ) {
                 localStorage.removeItem('candy');
-                this.$store.state.onlyForceLoad = false
-                this.$store.state.pageNumber = 0
+                this.$store.state.page.onlyForceLoad = false
+                this.$store.state.page.pageNumber = 0
                 this.$store.commit('account/clearLogin')
                 this.$store.commit('clearAuction')
                 this.$store.dispatch('fetchAuction')
