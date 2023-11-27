@@ -4,14 +4,14 @@
             <item-card v-for="[box_id, box] of items"
                 class="item-card"
                 @active_form="(active_form, item_id, title, quantity) => {this.activeForm = active_form, this.item_id = parseInt(item_id), this.title = title, this.quantity = parseInt(quantity)}"
-                :key="`${$store.state.loc}_${box_id}`"
+                :key="`${account.loc}_${box_id}`"
                 :box="box">
             </item-card>
         </TransitionGroup>
-        <div v-if="this.$store.state.loc === 'auction'" v-intersection="() => this.$store.dispatch('fetchAuction')" class="observer"></div> 
-        <lot-form v-if="this.$store.state.activeForm === 'LotForm'">
+        <div v-if="account.loc === 'auction'" v-intersection="() => this.$store.dispatch('fetchAuction')" class="observer"></div> 
+        <lot-form v-if="page.activeForm === 'LotForm'">
         </lot-form>
-        <auth-form v-if="this.$store.state.activeForm === 'SignUpForm'"></auth-form>
+        <auth-form v-if="page.activeForm === 'SignUpForm'"></auth-form>
         <announcement></announcement>
     </section>
 </template>
@@ -20,6 +20,7 @@ import ItemCard from '@/components/ItemCard.vue';
 import LotForm from '@/components/LotForm.vue';
 import AuthForm from '@/components/AuthForm.vue';
 import Announcement from '@/components/Announcement.vue';
+import { mapState } from 'vuex';
 
 export default {
     components: {
@@ -33,18 +34,20 @@ export default {
         }
     },
     computed: {
+        ...mapState(["account", "page"]),
+
         items() {
-            if (this.$store.state.loc === 'auction') {
+            if (this.account.loc === 'auction') {
                 return this.$store.state.auction
-            } else if (this.$store.state.loc === 'bids') {
+            } else if (this.account.loc === 'bids') {
                 return this.$store.state.bids
-            } else if (this.$store.state.loc === 'lots') {
+            } else if (this.account.loc === 'lots') {
                 return this.$store.state.lots
-            } else if (this.$store.state.loc === 'storage') {
+            } else if (this.account.loc === 'storage') {
                 return this.$store.state.storage
-            } else if (this.$store.state.loc === 'production') {
+            } else if (this.account.loc === 'production') {
                 return this.$store.state.products
-            } else if (this.$store.state.loc === 'favs') {
+            } else if (this.account.loc === 'favs') {
                 return this.$store.state.favs
             }
         }
@@ -52,7 +55,7 @@ export default {
     async mounted() {
         await this.$store.dispatch('fetchAccountData')
         //this.$store.dispatch('fetchAuction')
-        this.$store.commit('setSocket')
+        this.$store.commit('account/setSocket')
         this.$store.dispatch('fetchProduction')
         this.$store.dispatch('fetchStorage') 
     }

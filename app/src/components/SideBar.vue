@@ -1,39 +1,43 @@
 <template>
     <nav>
         <side-bar-button
-            :class="{'active-btn': $store.state.loc === 'auction'}"
-            @click="$store.commit('changeLoc', 'auction')"
+            :class="{'active-btn': account.loc === 'auction'}"
+            @click="$store.commit('account/changeLoc', 'auction')"
         >Auction</side-bar-button>
         <side-bar-button
-            :class="{'active-btn': $store.state.loc === 'bids'}"
-            @click="$store.commit('changeLoc', 'bids')"
+            :class="{'active-btn': account.loc === 'bids'}"
+            @click="$store.commit('account/changeLoc', 'bids')"
         >My Bids</side-bar-button>
         <side-bar-button
-            :class="{'active-btn': $store.state.loc === 'lots'}"
-            @click="$store.commit('changeLoc', 'lots')"
+            :class="{'active-btn': account.loc === 'lots'}"
+            @click="$store.commit('account/changeLoc', 'lots')"
         >My Lots</side-bar-button>
         <side-bar-button
-            :class="{'active-btn': $store.state.loc === 'storage'}"
-            @click="$store.commit('changeLoc', 'storage')"
+            :class="{'active-btn': account.loc === 'storage'}"
+            @click="$store.commit('account/changeLoc', 'storage')"
         >Storage</side-bar-button>
         <side-bar-button
-            :class="{'active-btn': $store.state.loc === 'production'}"
-            @click="$store.commit('changeLoc', 'production')"
+            :class="{'active-btn': account.loc === 'production'}"
+            @click="$store.commit('account/changeLoc', 'production')"
         >Production</side-bar-button>
         <side-bar-button
-            :class="{'active-btn': $store.state.loc === 'favs'}"
-            @click="$store.commit('changeLoc', 'favs')"
+            :class="{'active-btn': account.loc === 'favs'}"
+            @click="$store.commit('account/changeLoc', 'favs')"
         >Favs</side-bar-button>
     </nav>
 </template>
     
 <script>
 import SideBarButton from '@/components/UI/SideBarButton.vue';
+import { mapState } from 'vuex';
+
 export default {
     components: {
         SideBarButton
     },
-    methods: {}
+    computed: {
+        ...mapState(["account"])
+    }
 }    
 </script>
     

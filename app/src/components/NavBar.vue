@@ -2,16 +2,16 @@
     <nav>
         <nav-button class="btn home" :route="'/'">Auction Online</nav-button>
         <info-block></info-block>
-        <div class="btn-group" v-if="this.$store.state.login == null">
+        <div class="btn-group" v-if="account.login == null">
             <nav-button
                 class="btn auth"
-                @click="this.$store.commit('setForm', {form: 'SignUpForm'})"
+                @click="this.$store.commit('page/setForm', {form: 'SignUpForm'})"
             >Sign In</nav-button>
         </div>
         <div class="btn-group" v-else>
             <nav-button
-                :class="{'info btn auth short': true, 'wait': $store.state.money == null}"
-            >{{ this.$store.state.login }}</nav-button>
+                :class="{'info btn auth short': true}"
+            >{{ account.login }}</nav-button>
             <nav-button
                 class="btn short signout"
                 @click="signout"
@@ -27,6 +27,7 @@
 import NavButton from '@/components/UI/NavButton.vue';
 import { parseIntegers } from "@/scripts";
 import InfoBlock from '@/components/InfoBlock.vue';
+import { mapState } from 'vuex';
 
 export default {
     components: {
@@ -43,10 +44,14 @@ export default {
                 localStorage.removeItem('candy');
                 this.$store.state.onlyForceLoad = false
                 this.$store.state.pageNumber = 0
-                this.$store.commit('clearLogin')
+                this.$store.commit('account/clearLogin')
+                this.$store.commit('clearAuction')
                 this.$store.dispatch('fetchAuction')
             }
         },
+    },
+    computed: {
+        ...mapState(["account", "page"])
     }
 }
 </script>

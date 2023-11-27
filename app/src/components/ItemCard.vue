@@ -13,42 +13,42 @@
         <footer>
             <div class="card__btns">
                 <card-button
-                    v-if="['bids', 'auction', 'favs'].includes($store.state.loc) && $store.state.login != null"
-                    :class="{no: this.box.price > $store.state.money}"
+                    v-if="['bids', 'auction', 'favs'].includes(account.loc) && account.login != null"
+                    :class="{no: this.box.price > account.money}"
                     @click="$store.commit('buyLot', $props.box), $event.target.classList.add('wait')"
                 >Buy</card-button>
                 <card-button
-                    v-if="['bids', 'auction', 'favs'].includes($store.state.loc) && $store.state.login != null"
-                    :class="{bidded: $store.state.bids.has(this.box.lot_id), no: this.box.bid_step > $store.state.money}"
+                    v-if="['auction', 'favs'].includes(account.loc) && account.login != null"
+                    :class="{bidded: $store.state.bids.has(this.box.lot_id), no: this.box.bid_step > account.money}"
                     @click="$store.commit('bidLot', $props.box), $event.target.classList.add('wait')"
                 >Bid</card-button>
                 <card-button
-                    v-if="['bids', 'auction', 'favs'].includes($store.state.loc) && $store.state.login != null"
+                    v-if="['bids', 'auction', 'favs'].includes(account.loc) && account.login != null"
                     :class="{faved: $store.state.favs.has(this.box.lot_id)}"
                     @click="$store.commit('favLot', $props.box), $event.target.classList.add('wait')"
                 >Fav</card-button>
                 <card-button
-                    v-if="$store.state.loc === 'lots'"
+                    v-if="account.loc === 'lots'"
                     @click="$store.commit('cancelLot', $props.box), $event.target.classList.add('wait')"
                 >Stop</card-button>
                 <card-button
-                    v-if="$store.state.loc === 'storage'"
+                    v-if="account.loc === 'storage'"
                 >Use</card-button>
                 <card-button
-                    v-if="$store.state.loc === 'storage'"
+                    v-if="account.loc === 'storage'"
                     :class="{'wait': $props.box.selling === true}"
                     @click="$store.commit('setForm', {form: 'LotForm', data: $props.box})"
                 >Sell</card-button>
                 <card-button
-                    v-if="$store.state.loc === 'production'"
+                    v-if="account.loc === 'production'"
                 >State</card-button>
                 <card-button
-                    v-show="$store.state.loc === 'production' && $props.box.process"
+                    v-show="account.loc === 'production' && $props.box.process"
                     @click="$store.commit('abortCraft', $props.box)"
                     :style="getBarProgress"
                 >Abort</card-button>
                 <card-button
-                    v-show="$store.state.loc === 'production' && !$props.box.process"
+                    v-show="account.loc === 'production' && !$props.box.process"
                     :class="{'wait': $props.box.done === false}"
                     @click="$store.commit('startCraft', $props.box), $event.target.classList.add('wait')"
                 >Craft</card-button>
@@ -63,6 +63,7 @@
 </template>
 <script>
 import CardButton from '@/components/UI/CardButton.vue';
+import { mapState } from 'vuex';
 
 export default {
     components: {
@@ -75,6 +76,9 @@ export default {
         }
     },
     computed: {
+
+        ...mapState(["account"]),
+
         getCtaftingProgress() {
             return this.$props.box.progress
         },
