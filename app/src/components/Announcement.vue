@@ -1,12 +1,16 @@
 <template>
     <section v-if="page.activeForm === 'Announcement' && this.noCandy" @click="this.$store.commit('page/clearForm')">
         <div @click.stop>
-          <article>
-            <p>Hello and welcome to my Auction website!</p>
+          <article class="text-left">
+            <h3>Hello and welcome to my Auction website!</h3>
             <p>This site is a practice ground for new skills and implementations.</p>
             <p>Please allow a few seconds for the web service to wake up and load data.</p>
             <p>You can sign up or use a pre-created account { test : 123 }.</p>
             <p>Have a great day!</p>
+          </article>
+          <article class="text-right">
+            <h3>Stack used:</h3>
+            <p>Vue.js | Express.js | Socket.io | PostgreSQL</p>
           </article>
         </div>
     </section>
@@ -44,12 +48,10 @@ export default {
     }
 
     div {
-        font-size: clamp(16px, 2vmin, 30px);
+        font-size: clamp(12px, 2vmin, 30px);
         position: fixed;
-        top: 30%;
         width: 70%;
-        padding: 40px;
-        padding-left: 10%;
+        padding: 0 10%;
         background-color: var(--color-pop);
         border-radius: 15px;
         color: white;
@@ -68,13 +70,26 @@ export default {
     }
 
     article {
-      border-left: 4px solid var(--color-three);
       color: var(--color-one);
       border-radius: 5px;
+      margin-bottom: 20px;
+      padding: 10px;
+    }
+
+    .text-left {
+      border-top: 4px solid var(--color-three);
+      border-left: 4px solid var(--color-three);
       padding-left: 20px;
     }
 
-    p {
+    .text-right {
+      text-align: right;
+      border-right: 4px solid var(--color-three);
+      border-bottom: 4px solid var(--color-three);
+      padding-right: 20px;
+    }
+
+    h3, p {
       margin-bottom: 5px;
     }
 </style>
