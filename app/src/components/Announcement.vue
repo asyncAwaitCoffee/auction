@@ -1,6 +1,6 @@
 <template>
-    <section v-if="page.activeForm === 'Announcement' && this.noCandy" @click="this.$store.commit('page/clearForm')">
-        <div @click.stop>
+    <section v-if="page.activeForm === 'Announcement' && this.noCandy" @mousedown="this.$store.commit('page/clearForm')">
+        <div @mousedown.stop>
           <article class="text-left">
             <h3>Hello and welcome to my Auction website!</h3>
             <p>This site is a practice ground for new skills and implementations.</p>
@@ -72,8 +72,11 @@ export default {
     article {
       color: var(--color-one);
       border-radius: 5px;
-      margin-bottom: 20px;
       padding: 10px;
+    }
+
+    article:not(:last-child) {
+      margin-bottom: 20px;
     }
 
     .text-left {

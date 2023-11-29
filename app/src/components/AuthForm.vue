@@ -1,6 +1,6 @@
 <template>
-    <form @submit.prevent="submit" @click="clear">
-        <fieldset @click.stop>
+    <form @submit.prevent="submit" @mousedown="clear">
+        <fieldset @mousedown.stop>
             <input v-model="this.login" type="text" placeholder="Login" required>
             <input v-model="this.password" type="password" placeholder="Password" required>
             <div class="auth">
@@ -16,6 +16,7 @@
     
 <script>
 import { parseIntegers } from "@/scripts";
+import { adress } from "stores/constants";
 
 export default {
     data() {
@@ -31,7 +32,7 @@ export default {
         async submit() {
             this.$store.commit('page/clearForm')
 
-            const URL = `${import.meta.env.VITE_URL}/${this.path}?login=${this.login}&password=${this.password}`
+            const URL = `${adress}/${this.path}?login=${this.login}&password=${this.password}`
             const { ok, error, candy } = await fetch(URL, {credentials: 'include'})
                 .then(res => res.text())
                 .then(data => JSON.parse(data, parseIntegers))

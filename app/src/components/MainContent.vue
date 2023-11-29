@@ -1,5 +1,5 @@
 <template>
-    <section :class="{'board__content': true}">
+    <section class="board__content">
         <TransitionGroup name="list">
             <item-card v-for="[box_id, box] of items"
                 class="item-card"

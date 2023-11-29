@@ -89,6 +89,8 @@ input[type="text"][disabled] {
   --color-pop: rgba(25, 39, 45, 0.7);
   
   --gap: 5px;
+
+  --media-max: 900px;
 }
 
 button {
@@ -106,13 +108,17 @@ html, body {
   background-image: linear-gradient(90deg, var(--color-one), rgba(255, 255, 255));
   display: grid;
   gap: var(--gap);
-  grid-template-columns: 1fr 10fr;
+  grid-template-columns: minmax(200px, 1fr) 10fr;
   grid-template-rows: 1fr 20fr;
   grid-template-areas:
     "nav-bar nav-bar"
     "side-content main-content";
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1500px) {
+    grid-template-columns: minmax(200px, 2fr) 10fr;
+  }
+
+  @media screen and (max-width: 1200px) {
     grid-template-columns: auto;
     grid-template-rows: 1fr 1fr 20fr;
     grid-template-areas:
@@ -134,7 +140,7 @@ html, body {
   gap: var(--gap);
   padding: 1px 1px 1px 0;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1200px) {
     flex-flow: row;
   }
 }
@@ -151,21 +157,19 @@ html, body {
     display: none;
 }
 .wait:not(.no) {
-    animation-name: waiting;
-    animation-duration: 0.5s;
-    animation-timing-function: ease;
+    animation-name: rotating;
+    animation-duration: 2s;
+    animation-timing-function: linear;
     animation-iteration-count: infinite;
-    animation-direction: alternate;
+    animation-direction: normal;
 }
 
-@keyframes waiting {
+@keyframes rotating {
     from {
-        transform: rotateX(0.5turn);
-        background-color: red;
+        transform: rotate(0);
     }
     to {
-        transform: rotateX(-0.5turn);
-        background-color: var(--color-one);
+        transform: rotate(360deg);
     }
 }
 

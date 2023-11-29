@@ -1,6 +1,6 @@
 <template>
-    <form @submit.prevent="submit" @click="clear">
-        <fieldset @click.stop>
+    <form @submit.prevent="submit" @mousedown="clear">
+        <fieldset @mousedown.stop>
             <input type="text" :value="box.item.title" disabled>
             <input v-model="this.price" type="number" min="1" placeholder="Price per item" required>
             <input v-model="this.bid_step" type="number" min="1" :max="this.price / 2" placeholder="Raise per bid" required>

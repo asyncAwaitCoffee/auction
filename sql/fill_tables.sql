@@ -6,7 +6,8 @@ insert into vue3_learning.accounts
 	(login, password_hash, my_money)
 values
 	('qwe1', '123', 10000),
-	('qwe2', '123', 10000);
+	('qwe2', '123', 10000),
+	('test', '123', 10000);
 
 -----------------------------------------------------------------------	items
 truncate table vue3_learning.items;
@@ -114,7 +115,13 @@ values
 	(1, 6, false, 0),
 	(1, 1, false, 0),
 	(1, 2, false, 0),
-	(1, 3, false, 0);
+	(1, 3, false, 0),
+	(3, 5, false, 0),
+	(3, 4, false, 0),
+	(3, 6, false, 0),
+	(3, 1, false, 0),
+	(3, 2, false, 0),
+	(3, 3, false, 0);
 	
 -----------------------------------------------------------------------	favorites
 truncate table vue3_learning.favorites;
