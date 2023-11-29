@@ -43,17 +43,13 @@ export default {
     
 <style scoped>
     nav {
-        height: 30%;
         display: flex;
         flex-flow: column;
         flex-wrap: nowrap;
         border-bottom: 4px solid var(--color-four);
         background-image: linear-gradient(var(--color-two), var(--color-three) 15%, var(--color-three));
-        min-height: 40px;
 
-        overflow: scroll;
-
-        @media screen and (max-width: 900px) {
+        @media screen and (max-width: 1200px) {
             flex-flow: row;
             height: 100%;
             width: 100%;

@@ -114,6 +114,8 @@ app.post('/auction/sell', async (req, res) => {
     const { item_id, price, bid_step, quantity } = req.query
     const { lot_id, need_to_del } = await DB.queryRow('call vue3_learning.sell_auction_lot($1, $2, $3, $4, $5, null, null);', account_id, item_id, price, bid_step, quantity)
 
+    console.log(lot_id, need_to_del)
+
     io.emit("lot_new", JSON.stringify({ lot_id }))
     res.send({lot_id, need_to_del})
 })

@@ -5,3 +5,7 @@ export const getProduction = (state) => {
 export const getItemFromAuction = (state) => {
     return (lot_id) => state.auction.get(lot_id).item
 }
+
+export const needToLoadMore = (state) => {
+    return state.auction.size < state.page.loadLimit
+}

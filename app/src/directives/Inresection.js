@@ -13,7 +13,7 @@ export default {
                 return
             }
             
-            if (entries[0].intersectionRatio < 1 || store.state.auction.size < 10 ) {
+            if (entries[0].intersectionRatio < 1 || store.getters.needToLoadMore ) {
                 binding.value()
             }
         }

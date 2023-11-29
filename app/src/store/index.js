@@ -1,13 +1,13 @@
 import { createStore } from "vuex";
 import { Item, Lot, Storage, parseIntegers } from "@/scripts";
 
-import { adress } from "./modules/constants";
+import { adress } from "stores/constants";
 
 import * as actions from "./actions";
 import * as getters from "./getters"
 
-import account from "./modules/account";
-import page from "./modules/page";
+import account from "stores/account";
+import page from "stores/page";
 
 export default createStore({
 
@@ -124,6 +124,15 @@ export default createStore({
 
         async favLot(state, lot) {
             const URL = `${adress}/auction/fav?lot_id=${lot.lot_id}`
+            let setted = false
+
+            if (state.favs.has(lot.lot_id)) {
+                state.favs.delete(lot.lot_id)
+            } else {
+                state.favs.set(lot.lot_id, lot)
+                setted = true
+            }
+        
             const { need_to_del, error } = await fetch(URL, {
                 credentials: 'include',
                 method: 'POST',
@@ -136,14 +145,8 @@ export default createStore({
 
             if (error) {
                 console.error(`error: ${error}`)
+                setted ? state.favs.delete(lot.lot_id) : state.favs.set(lot.lot_id, lot)
             }
-
-            if (need_to_del) {
-                state.favs.delete(lot.lot_id)
-            } else {
-                state.favs.set(lot.lot_id, lot)
-            }
-        
         },
 
         addItem(state, box) {

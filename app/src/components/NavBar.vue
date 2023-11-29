@@ -10,7 +10,7 @@
         </div>
         <div class="btn-group" v-else>
             <nav-button
-                :class="{'info btn auth short': true}"
+                class="info btn auth short"
             >{{ account.login }}</nav-button>
             <nav-button
                 class="btn short signout"
@@ -95,7 +95,7 @@ nav {
     align-items: center;
     isolation: isolate;
 
-    @media screen and (max-width: 900px) {
+    @media screen and (max-width: 1200px) {
         width: 50%;
     }
 }
