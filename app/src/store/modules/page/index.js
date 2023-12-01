@@ -29,6 +29,11 @@ export default {
 
         setPageLoading(state, isLoading) {
             state.isPageLoading = isLoading
+        },
+
+        clearPage(state) {
+            state.onlyForceLoad = false
+            state.pageNumber = 0
         }
     }
 }
