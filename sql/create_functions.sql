@@ -74,10 +74,8 @@ returns table
 	quantity bigint,
 	bid_step bigint,
 	current_bid bigint,
-	is_highest_bidder boolean,
 	date_start timestamp(0),
 	date_end timestamp(0),
-	is_owner boolean,
 	is_faved boolean,
 	item jsonb
 )
@@ -92,10 +90,8 @@ select
 	a.quantity,
 	a.bid_step,
 	a.current_bid,
-	a.highest_bidder = _account_id as is_highest_bidder,
 	a.date_start,
 	a.date_end,
-	a.lot_owner = _account_id as is_owner,
 	f.lot_id is not null as is_faved,
 	jsonb_build_object('item_id', i.item_id, 'title', i.title) as item
 from vue3_learning.auction as a
@@ -104,14 +100,105 @@ from vue3_learning.auction as a
 	left join vue3_learning.favorites as f
 		on f.account_id = _account_id
 			and f.lot_id = a.lot_id
-order by is_highest_bidder desc
+where _account_id is null
+	or ( a.highest_bidder <> _account_id and a.lot_owner <> _account_id )
+limit _limit offset _offset;
+		
+end $$;
+
+create or replace function vue3_learning.get_bids
+(
+	_account_id bigint,
+	_limit smallint,
+	_offset smallint
+)
+returns table
+(
+	lot_id bigint,
+	price bigint,
+	quantity bigint,
+	bid_step bigint,
+	current_bid bigint,
+	date_start timestamp(0),
+	date_end timestamp(0),
+	is_faved boolean,
+	item jsonb
+)
+language plpgsql
+security definer												-- ??
+as $$
+begin
+return query
+select
+	a.lot_id,
+	a.price,
+	a.quantity,
+	a.bid_step,
+	a.current_bid,
+	a.date_start,
+	a.date_end,
+	f.lot_id is not null as is_faved,
+	jsonb_build_object('item_id', i.item_id, 'title', i.title) as item
+from vue3_learning.auction as a
+	join vue3_learning.items as i
+		on i.item_id = a.item_id
+	left join vue3_learning.favorites as f
+		on f.account_id = _account_id
+			and f.lot_id = a.lot_id
+where a.highest_bidder = _account_id
+limit _limit offset _offset;
+		
+end $$;
+
+create or replace function vue3_learning.get_lots
+(
+	_account_id bigint,
+	_limit smallint,
+	_offset smallint
+)
+returns table
+(
+	lot_id bigint,
+	price bigint,
+	quantity bigint,
+	bid_step bigint,
+	current_bid bigint,
+	date_start timestamp(0),
+	date_end timestamp(0),
+	is_faved boolean,
+	item jsonb
+)
+language plpgsql
+security definer												-- ??
+as $$
+begin
+return query
+select
+	a.lot_id,
+	a.price,
+	a.quantity,
+	a.bid_step,
+	a.current_bid,
+	a.date_start,
+	a.date_end,
+	f.lot_id is not null as is_faved,
+	jsonb_build_object('item_id', i.item_id, 'title', i.title) as item
+from vue3_learning.auction as a
+	join vue3_learning.items as i
+		on i.item_id = a.item_id
+	left join vue3_learning.favorites as f
+		on f.account_id = _account_id
+			and f.lot_id = a.lot_id
+where a.lot_owner = _account_id
 limit _limit offset _offset;
 		
 end $$;
 
 create or replace function vue3_learning.get_storage
 (
-	_account_id bigint
+	_account_id bigint,
+	_limit smallint,
+	_offset smallint
 )
 returns table
 (
@@ -129,12 +216,15 @@ select
 from vue3_learning.storage as s
 	join vue3_learning.items i
 		on s.item_id = i.item_id
-where s.account_id = _account_id;
+where s.account_id = _account_id
+limit _limit offset _offset;
 end $$;
 
 create or replace function vue3_learning.get_production
 (
-	_account_id bigint
+	_account_id bigint,
+	_limit smallint,
+	_offset smallint
 )
 returns table
 (
@@ -168,7 +258,8 @@ from vue3_learning.production as p
 		on p.recipe_id = r.recipe_id
 	join vue3_learning.items as i
 		on i.item_id = r.item_id
-where p.account_id = _account_id;
+where p.account_id = _account_id
+limit _limit offset _offset;
 end $$;
 
 create or replace function vue3_learning.get_production
@@ -200,4 +291,45 @@ from vue3_learning.production as p
 		on p.recipe_id = r.recipe_id
 where p.production_id = _production_id
 	and p.account_id = _account_id;
+end $$;
+
+create or replace function vue3_learning.get_favs
+(
+	_account_id bigint,
+	_limit smallint,
+	_offset smallint
+)
+returns table
+(
+	lot_id bigint,
+	price bigint,
+	quantity bigint,
+	bid_step bigint,
+	current_bid bigint,
+	date_start timestamp(0),
+	date_end timestamp(0),
+	item jsonb
+)
+language plpgsql
+security definer												-- ??
+as $$
+begin
+return query
+select
+	a.lot_id,
+	a.price,
+	a.quantity,
+	a.bid_step,
+	a.current_bid,
+	a.date_start,
+	a.date_end,
+	jsonb_build_object('item_id', i.item_id, 'title', i.title) as item
+from vue3_learning.favorites as f
+	join vue3_learning.auction as a
+		on a.lot_id = f.lot_id
+	join vue3_learning.items as i
+		on i.item_id = a.item_id			
+where f.account_id = _account_id
+	and f.lot_id is not null
+limit _limit offset _offset;
 end $$;

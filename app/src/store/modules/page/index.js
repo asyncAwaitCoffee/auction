@@ -2,13 +2,18 @@ export default {
     namespaced: true,
     state: {
 
-        activeForm: 'Announcement',
+        activeForm: null,
         formData: null,
         
-        isPageLoading: true,
-        pageNumber: 0,
+        isPageLoading: false,
+        pageAuction: 0,
+        pageBids: 0,
+        pageLots: 0,
+        pageStorage: 0,
+        pageProduction: 0,
+        pageFavs: 0,
         onlyForceLoad: false,
-        loadLimit: 25
+        loadLimit: 20
     },
     mutations: {
 

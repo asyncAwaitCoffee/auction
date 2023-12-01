@@ -1,5 +1,5 @@
 export const getProduction = (state) => {
-    return (production_id) => state.products.get(production_id)
+    return (production_id) => state.production.get(production_id)
 }
     
 export const getItemFromAuction = (state) => {
@@ -7,5 +7,5 @@ export const getItemFromAuction = (state) => {
 }
 
 export const needToLoadMore = (state) => {
-    return state.auction.size < state.page.loadLimit
+    return (pageSource) => state[pageSource].size < state.page.loadLimit
 }

@@ -2,14 +2,17 @@
 import NavBar from '@/components/NavBar.vue';
 import SideBar from '@/components/SideBar.vue';
 import MainContent from '@/components/MainContent.vue';
-import SideSubBar from '@/components/SideSubBar.vue';
 import InfoBlock from '@/components/InfoBlock.vue';
+
+import LotForm from '@/components/LotForm.vue';
+import AuthForm from '@/components/AuthForm.vue';
 
 import { mapState } from 'vuex';
 
 export default {
   components: {
-    NavBar, SideBar, MainContent, SideSubBar, InfoBlock
+    NavBar, SideBar, MainContent, InfoBlock,
+    LotForm, AuthForm
   },
   computed: {
     ...mapState(["page"])
@@ -22,11 +25,13 @@ export default {
     <nav-bar class="nav-bar"></nav-bar>
     <section class="side-content">
       <side-bar class="side-bar"></side-bar>
-<!--       <side-sub-bar class="side-sub-bar"></side-sub-bar> -->
     </section>
-    <section :class="{'main-content': true, 'content__loading': page.isPageLoading}">
+    <section class="main-content">
       <main-content></main-content>
     </section>
+
+    <lot-form v-if="page.activeForm === 'LotForm'"></lot-form>
+    <auth-form v-if="page.activeForm === 'SignUpForm'"></auth-form>
   </div>
 
 </template>
@@ -149,7 +154,6 @@ html, body {
   grid-area: main-content;
   border-top: 1px solid rgba(16, 83,115, 1);
   border-left: 1px solid rgba(16, 83,115, 1);
-  border-bottom: 1px solid rgba(16, 83,115, 1);
   overflow-y: scroll;
   position: relative;
 }
@@ -173,27 +177,5 @@ html, body {
     }
 }
 
-.content__loading {
-    animation-name: loading;
-    animation-duration: 0.5s;
-    animation-timing-function: ease;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
 
-@keyframes loading {
-    from {
-        background-color: rgba(139, 176,193, 1);
-    }
-    to {
-        background-color: rgba(139, 176,193, 0.3);
-    }
-}
-
-.observer {
-    width: 25px;
-    height: 25px;
-    background-color: rgba(0, 128, 0, 0);
-    align-self: flex-end;
-}
 </style>

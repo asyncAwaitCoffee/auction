@@ -13,7 +13,7 @@ export default {
                 return
             }
             
-            if (entries[0].intersectionRatio < 1 || store.getters.needToLoadMore ) {
+            if (entries[0].intersectionRatio < 1 || store.getters.needToLoadMore(element.dataset.observe) ) {
                 binding.value()
             }
         }

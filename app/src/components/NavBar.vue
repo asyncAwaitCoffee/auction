@@ -16,10 +16,10 @@
                 class="btn short signout"
                 @click="signout"
             >
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1.5em" viewBox="-0.3 -0.3 7.6 11.6">
-	            <path d="M 0 0 L 0 9 L 6 11 L 6 2 z M 1 2 L 4 3 L 4 9 L 1 8 Z M 0 0 L 7 0 L 7 9 L 6 9" stroke-width="0.3" fill="none"/>
-            </svg>
-        </nav-button>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1.5em" viewBox="-0.3 -0.3 7.6 11.6">
+	                <path d="M 0 0 L 0 9 L 6 11 L 6 2 z M 1 2 L 4 3 L 4 9 L 1 8 Z M 0 0 L 7 0 L 7 9 L 6 9" stroke-width="0.3" fill="none"/>
+                </svg>
+            </nav-button>
         </div>
     </nav>
 </template>
@@ -57,7 +57,6 @@ export default {
 </script>
 <style scoped>
 nav {
-    background-image: linear-gradient(var(--color-three), var(--color-two));
     display: flex;
     flex-flow: row;
     justify-content: space-between;
@@ -66,6 +65,7 @@ nav {
     min-height: 40px;
     border-bottom: 4px solid var(--color-four);
     overflow: hidden;
+    background: transparent;
 }
 .btn.home {
     font-size: clamp(10px, 1.4rem, 25px);
