@@ -65,7 +65,7 @@ export class MySocket {
     this.#socket.on("lot_sold",
       data => {
         const { owner_money } = JSON.parse(data, parseIntegers)
-        store.commit('setMoney', owner_money)
+        store.commit('account/setMoney', owner_money)
     });
   
     this.#socket.on("lot_remove",
@@ -81,9 +81,7 @@ export class MySocket {
     });    
 
     return this.#socket
-  }
-
-  
+  } 
 
 }
 

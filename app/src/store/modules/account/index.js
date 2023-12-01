@@ -3,7 +3,7 @@ import { MySocket } from "@/socket"
 export default {
     namespaced: true,
     state: {
-        loc: "auction",
+        loc: "home",
         money: null,
         login: null,
         socket: null,
@@ -20,6 +20,7 @@ export default {
             }
             state.login = login
             this.commit('account/setSocket')
+            this.commit("account/setAccountLoading", false)
         },
 
         clearLogin(state) {
@@ -43,6 +44,7 @@ export default {
         setAccountData(state,  {login, my_money}) {
             state.login = login
             state.money = my_money
+            this.commit("account/setAccountLoading", false)
         },
 
         setAccountLoading(state, isLoading) {

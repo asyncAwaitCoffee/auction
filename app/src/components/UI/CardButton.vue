@@ -8,7 +8,7 @@ export default {}
     
 <style scoped>
     button {
-        color: rgba(241, 237,232, 1);
+        color: black;
         text-decoration: none;
         padding: 1px;
         margin-right: 5%;

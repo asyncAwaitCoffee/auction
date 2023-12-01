@@ -1,29 +1,12 @@
 <template>
     <nav>
-        <side-bar-button
-            :class="{'active-btn': account.loc === 'auction'}"
-            @click="$store.commit('account/changeLoc', 'auction')"
-        >Auction</side-bar-button>
-        <side-bar-button
-            :class="{'active-btn': account.loc === 'bids'}"
-            @click="$store.commit('account/changeLoc', 'bids')"
-        >My Bids</side-bar-button>
-        <side-bar-button
-            :class="{'active-btn': account.loc === 'lots'}"
-            @click="$store.commit('account/changeLoc', 'lots')"
-        >My Lots</side-bar-button>
-        <side-bar-button
-            :class="{'active-btn': account.loc === 'storage'}"
-            @click="$store.commit('account/changeLoc', 'storage')"
-        >Storage</side-bar-button>
-        <side-bar-button
-            :class="{'active-btn': account.loc === 'production'}"
-            @click="$store.commit('account/changeLoc', 'production')"
-        >Production</side-bar-button>
-        <side-bar-button
-            :class="{'active-btn': account.loc === 'favs'}"
-            @click="$store.commit('account/changeLoc', 'favs')"
-        >Favs</side-bar-button>
+        <template v-for="loc in locations">
+            <side-bar-button v-if="account.login || ['home', 'auction', 'faq'].includes(loc)"
+                :id="loc"
+                :checked="loc == 'home'"
+            >        
+            </side-bar-button>
+        </template>
     </nav>
 </template>
     
@@ -34,6 +17,13 @@ import { mapState } from 'vuex';
 export default {
     components: {
         SideBarButton
+    },
+    data() {
+        return {
+            locations: [
+                "home", "auction", "bids", "lots", "storage", "production", "favs", "logs"
+            ]
+        }
     },
     computed: {
         ...mapState(["account"])
@@ -46,13 +36,16 @@ export default {
         display: flex;
         flex-flow: column;
         flex-wrap: nowrap;
-        border-bottom: 4px solid var(--color-four);
-        background-image: linear-gradient(var(--color-two), var(--color-three) 15%, var(--color-three));
+        background: transparent;
+        gap: 5px;
+        padding-left: 15px;
 
         @media screen and (max-width: 1200px) {
+            padding-left: 0;
             flex-flow: row;
             height: 100%;
             width: 100%;
+            gap: 0;
         }
     }
     nav::-webkit-scrollbar {

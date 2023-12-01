@@ -63,10 +63,33 @@ app.post('/account', async (req, res) => {
 
 app.post('/auction', async (req, res) => {
     const account_id = res.locals.account_id
-
     const { limit, offset } = req.query
 
     const result = await DB.queryRows('select * from vue3_learning.get_auction($1, $2, $3)', account_id, limit, offset)
+    res.send({result})
+})
+
+app.post('/bids', async (req, res) => {
+    const account_id = res.locals.account_id
+    const { limit, offset } = req.query
+
+    const result = await DB.queryRows('select * from vue3_learning.get_bids($1, $2, $3)', account_id, limit, offset)
+    res.send({result})
+})
+
+app.post('/lots', async (req, res) => {
+    const account_id = res.locals.account_id
+    const { limit, offset } = req.query
+
+    const result = await DB.queryRows('select * from vue3_learning.get_lots($1, $2, $3)', account_id, limit, offset)
+    res.send({result})
+})
+
+app.post('/favs', async (req, res) => {
+    const account_id = res.locals.account_id
+    const { limit, offset } = req.query
+
+    const result = await DB.queryRows('select * from vue3_learning.get_favs($1, $2, $3)', account_id, limit, offset)
     res.send({result})
 })
 
@@ -75,7 +98,6 @@ app.post('/auction/bid', async (req, res) => {
     const { lot_id } = req.query
     
     const { money_left, last_bid, prev_bid, prev_bidder } = await DB.queryRow('call vue3_learning.bid_auction_lot($1, $2, null, null, null, null);', account_id, lot_id)
-
 
     if (!last_bid) {
       res.send({ error: { money_left, last_bid, prev_bid, prev_bidder } })
@@ -94,8 +116,6 @@ app.post('/auction/bid', async (req, res) => {
 app.post('/auction/buy', async (req, res) => {
     const account_id = res.locals.account_id
     const { lot_id } = req.query
-
-    console.log(account_id, lot_id)
     
     const { lot_owner, my_money, owner_money } = await DB.queryRow('call vue3_learning.buy_auction_lot($1, $2, null, null, null);', account_id, lot_id)
 
@@ -113,8 +133,6 @@ app.post('/auction/sell', async (req, res) => {
     const account_id = res.locals.account_id
     const { item_id, price, bid_step, quantity } = req.query
     const { lot_id, need_to_del } = await DB.queryRow('call vue3_learning.sell_auction_lot($1, $2, $3, $4, $5, null, null);', account_id, item_id, price, bid_step, quantity)
-
-    console.log(lot_id, need_to_del)
 
     io.emit("lot_new", JSON.stringify({ lot_id }))
     res.send({lot_id, need_to_del})
@@ -140,13 +158,17 @@ app.post('/auction/fav', async (req, res) => {
 
 app.post('/storage', async (req, res) => {
     const account_id = res.locals.account_id
-    const result = await DB.queryRows('select * from vue3_learning.get_storage($1)', account_id)
+    const { limit, offset } = req.query
+
+    const result = await DB.queryRows('select * from vue3_learning.get_storage($1, $2, $3)', account_id, limit, offset)
     res.send({result})
 })
 
 app.post('/production', async (req, res) => {
     const account_id = res.locals.account_id
-    const result = await DB.queryRows('select * from vue3_learning.get_production($1)', account_id)
+    const { limit, offset } = req.query
+
+    const result = await DB.queryRows('select * from vue3_learning.get_production($1, $2, $3)', account_id, limit, offset)
     res.send({result})
 })
 

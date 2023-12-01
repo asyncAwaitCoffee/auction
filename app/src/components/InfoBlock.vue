@@ -1,7 +1,7 @@
 <template>
-    <section :class="{'content__loading': account.isAccountLoading && account.login != null}">
-        <nav-button class="info" v-if="account.money != null">Transactions</nav-button>
-        <nav-button class="info" v-if="account.money != null">{{ account.money }}G</nav-button>
+    <section>
+        <nav-button class="info" v-if="account.login != null">{{ account.money }}G</nav-button>
+        <nav-button class="info">State</nav-button>
     </section>
 </template>
 <script>
@@ -13,13 +13,13 @@ export default {
         NavButton
     },
     computed: {
-        ...mapState(["account"])
+        ...mapState(["account", "page"])
     }
 }
 </script>
 <style scoped>
 section {
-    width: 50%;
+    width: 60%;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;

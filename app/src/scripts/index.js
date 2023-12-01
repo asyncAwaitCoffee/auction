@@ -15,6 +15,7 @@ export class Lot {
         this.item = item
         this.img = img
         this.text = text
+        this.done = true
     }
 }
 
@@ -25,6 +26,7 @@ export class Storage {
         this.item = item
         this.img = img
         this.text = text
+        this.done = true
     }
 }
 
