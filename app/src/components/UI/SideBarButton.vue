@@ -1,6 +1,6 @@
 <template>
     <input
-        :checked="this.checked"
+        :checked="this.isChecked"
         type="radio"
         :id="this.id"
         name="loc__change"
@@ -9,6 +9,8 @@
 </template>
     
 <script>
+import { mapState } from 'vuex';
+
 export default {
     props: {
         id: {
@@ -17,6 +19,13 @@ export default {
         checked: {
             type: Boolean,
             default: false
+        }
+    },
+    computed: {
+        ...mapState(["account"]),
+
+        isChecked() {
+            return this.id == this.account.loc
         }
     }
 }

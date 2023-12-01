@@ -44,10 +44,6 @@ export default {
 
             return fetchers[this.loc]
         }
-    },
-    mounted() {
-        console.log(this.loc)
-        console.log(this.items)
     }
 }
 </script>

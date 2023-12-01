@@ -17,6 +17,7 @@
 <script>
 import { parseIntegers } from "@/scripts";
 import { adress } from "stores/constants";
+import { mapState } from 'vuex';
 
 export default {
     data() {
@@ -26,6 +27,9 @@ export default {
             name: 'SignUpForm',
             path: 'signin'
         }
+    },
+    computed: {
+        ...mapState(["account", "page"]),
     },
 
     methods: {
@@ -43,11 +47,9 @@ export default {
 
                 this.$store.commit('account/setAccountLoading', true)
                 this.$store.commit('page/setPageLoading', true)
-                this.$store.state.page.onlyForceLoad = false
-                this.$store.state.page.pageNumber = 0
-                this.$store.state.account.loc = "home"
                 
                 this.$store.commit('account/clearLogin')
+                this.$store.commit('page/clearPage')
                 this.$store.commit('clearAuction')
                 await this.$store.dispatch('fetchAccountData')
                 this.$store.commit('account/setSocket')

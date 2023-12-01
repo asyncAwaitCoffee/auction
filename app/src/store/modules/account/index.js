@@ -27,6 +27,8 @@ export default {
             state.login = null
             state.money = null
 
+            state.loc = "home"
+
             MySocket.clear()
             state.socket = null
         },
