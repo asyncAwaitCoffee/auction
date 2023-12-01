@@ -45,14 +45,15 @@ export default {
                 this.$store.commit('page/setPageLoading', true)
                 this.$store.state.page.onlyForceLoad = false
                 this.$store.state.page.pageNumber = 0
+                this.$store.state.account.loc = "home"
                 
                 this.$store.commit('account/clearLogin')
                 this.$store.commit('clearAuction')
                 await this.$store.dispatch('fetchAccountData')
                 this.$store.commit('account/setSocket')
-                this.$store.dispatch('fetchAuction')
-                this.$store.dispatch('fetchProduction')
-                this.$store.dispatch('fetchStorage')
+                //this.$store.dispatch('fetchAuction')
+                //this.$store.dispatch('fetchProduction')
+                //this.$store.dispatch('fetchStorage')
             }
 
             if (error) {
