@@ -10,7 +10,7 @@
             </article>
             <article class="text-right">
                 <h3>Stack used:</h3>
-                <p>Vue.js | Express.js | Socket.io | PostgreSQL</p>
+                <p>Vue.js | Vuex.js | Express.js | Socket.io | PostgreSQL</p>
             </article>
         </div>  
         <div class="p1">
