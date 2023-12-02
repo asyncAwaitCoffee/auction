@@ -5,11 +5,12 @@
         :id="this.id"
         name="loc__change"
         @change="$store.commit('account/changeLoc', this.id)">
-    <label :for="this.id">{{ id }}</label>
+    <label :for="this.id">{{ label }}</label>
 </template>
     
 <script>
 import { mapState } from 'vuex';
+import { toTitled } from '@/scripts/'
 
 export default {
     props: {
@@ -26,6 +27,10 @@ export default {
 
         isChecked() {
             return this.id == this.account.loc
+        },
+
+        label() {
+            return toTitled(this.id)
         }
     }
 }

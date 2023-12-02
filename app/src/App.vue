@@ -69,6 +69,11 @@ fieldset {
     background-color: var(--color-pop);;
     border-radius: 15px;
     box-shadow: 0 0 15px 15px var(--color-pop);
+
+    @media screen and (max-width: 800px) {
+      width: 85%;
+      padding: 25px;
+    }
 }
 input {
     padding: 15px;

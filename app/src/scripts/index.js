@@ -37,3 +37,7 @@ export function parseIntegers(_, value) {
     }
     return value
 }
+
+export function toTitled(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+}
