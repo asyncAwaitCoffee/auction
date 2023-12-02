@@ -1,6 +1,6 @@
 import './assets/main.css'
 import router from '@/router'
-import Inresection from '@/directives/Inresection.js'
+import directives from '@/directives'
 import { createApp } from 'vue'
 import App from './App.vue'
 import store from '@/store'
@@ -8,7 +8,9 @@ import store from '@/store'
 
 const app = createApp(App)
 
-app.directive(Inresection.name, Inresection)
+directives.forEach(directive => {
+    app.directive(directive.name, directive)    
+});
 
 app
     .use(router)

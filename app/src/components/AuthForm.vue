@@ -1,7 +1,7 @@
 <template>
     <form @submit.prevent="submit" @mousedown="clear">
         <fieldset @mousedown.stop>
-            <input v-model="this.login" type="text" placeholder="Login" required>
+            <input v-focus v-model="this.login" type="text" placeholder="Login" required>
             <input v-model="this.password" type="password" placeholder="Password" required>
             <div class="auth">
                 <input v-model="this.path" type="radio" name="auth" id="signin" value="signin" checked>
