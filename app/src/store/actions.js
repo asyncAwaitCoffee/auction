@@ -13,7 +13,7 @@ export const fetchAccountData = async ({ commit, state }) =>
 export const fetchAuction = async ({ commit, state }) =>
     {
         commit('page/setPageLoading', true)        
-        const result = await loadData("auction", state.page.loadLimit, state.favs.size)
+        const result = await loadData("auction", state.page.loadLimit, state.auction.size)
 
         await assignLoadedData(result, (item) => commit("setAuctionLot", item))
 
@@ -29,7 +29,7 @@ export const fetchAuction = async ({ commit, state }) =>
 export const fetchBids = async ({ commit, state }) =>
     {
         commit('page/setPageLoading', true)        
-        const result = await loadData("bids", state.page.loadLimit, state.favs.size)
+        const result = await loadData("bids", state.page.loadLimit, state.bids.size)
 
         await assignLoadedData(result, (item) => commit("setMyBid", item))
 
@@ -45,7 +45,7 @@ export const fetchBids = async ({ commit, state }) =>
 export const fetchLots = async ({ commit, state }) =>
     {
         commit('page/setPageLoading', true)        
-        const result = await loadData("lots", state.page.loadLimit, state.favs.size)
+        const result = await loadData("lots", state.page.loadLimit, state.lots.size)
 
         await assignLoadedData(result, (item) => commit("setMyLot", item))
 
@@ -61,7 +61,7 @@ export const fetchLots = async ({ commit, state }) =>
 export const fetchStorage = async ({ commit, state }) =>
     {
         commit('page/setPageLoading', true)        
-        const result = await loadData("storage", state.page.loadLimit, state.favs.size)
+        const result = await loadData("storage", state.page.loadLimit, state.storage.size)
 
         await assignLoadedData(result, (item) => commit("setStorageItem", item))
             
@@ -71,7 +71,7 @@ export const fetchStorage = async ({ commit, state }) =>
 export const fetchProduction = async ({ commit, state }) =>
     {
         commit('page/setPageLoading', true)
-        const result = await loadData("production", state.page.loadLimit, state.favs.size)
+        const result = await loadData("production", state.page.loadLimit, state.production.size)
 
         await assignLoadedData(result, (item) => commit("setProductionItem", item))
         
