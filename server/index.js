@@ -58,7 +58,8 @@ app.get('/signout', async (req, res) => {
 app.post('/account', async (req, res) => {
     const account_id = res.locals.account_id
     const result = await DB.queryRow('select * from vue3_learning.get_account($1)', account_id)
-    res.send(result)
+
+    res.send({result})
 })
 
 app.post('/auction', async (req, res) => {
