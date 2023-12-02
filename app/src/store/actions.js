@@ -1,4 +1,4 @@
-import { parseIntegers } from "../scripts/index"
+import { toTitled, parseIntegers } from '@/scripts/'
 import { adress } from "./modules/constants";
 
 export const fetchAccountData = async ({ commit, state }) =>
@@ -118,7 +118,7 @@ async function assignLoadedData(dataArray, assignMethod) {
                 .then(res => res.text())
                 .then(data => data ? JSON.parse(data, parseIntegers) : {})
             element.img = thumbnailUrl
-            element.text = title.slice(0, 1).toUpperCase() + title.slice(1)
+            element.text = toTitled(title)
             
             assignMethod(element)
         })
