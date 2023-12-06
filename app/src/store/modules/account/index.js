@@ -43,9 +43,12 @@ export default {
             }
         },
 
-        setAccountData(state,  {login, my_money}) {
-            state.login = login
-            state.money = my_money
+        setAccountData(state,  accountData) {
+            if (!accountData) {
+                return
+            }
+            state.login = accountData.login
+            state.money = accountData.my_money
             this.commit("account/setAccountLoading", false)
         },
 

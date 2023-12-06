@@ -82,6 +82,7 @@ nav {
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    min-width: fit-content;
 }
 
 .btn-group {

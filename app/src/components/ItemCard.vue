@@ -212,7 +212,7 @@ export default {
     flex-flow: row;
     flex-wrap: nowrap;
     justify-content: space-between;
-    font-size: clamp(18px, 1.1vmax, 30px);
+    font-size: clamp(18px, 0.3vmax + 1rem, 30px);
     align-items: center;
 }
 
