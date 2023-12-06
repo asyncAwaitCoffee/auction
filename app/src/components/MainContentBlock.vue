@@ -7,7 +7,12 @@
                 >
             </item-card>
         </TransitionGroup>
-    <div :class="{'content__loading': page.isPageLoading}" :data-observe="loc" v-show="account.loc === loc" v-intersection="() => this.$store.dispatch(fetcher)" class="observer"></div> 
+        <div
+            class="observer"
+            :class="{'content__loading': page.isPageLoading}"
+            :data-observe="loc"
+            v-intersection="() => this.$store.dispatch(fetcher)">
+        </div> 
     </section>
 </template>
     
@@ -18,16 +23,6 @@ import { mapState } from 'vuex';
 export default {
     components: {
         ItemCard
-    },
-    props: {
-        items: {
-            type: Map,
-            required: true,
-            default: new Map()
-        },
-        loc: {
-            type: String
-        }
     },
     computed: {
         ...mapState(["account", "page"]),
@@ -42,7 +37,29 @@ export default {
                 favs: "fetchFavs",
             }
 
+            console.log("hi", fetchers[this.loc])
+
             return fetchers[this.loc]
+        },
+
+        loc() {
+            return this.account.loc
+        },
+
+        items() {
+            if (this.account.loc === 'auction') {
+                return this.$store.state.auction
+            } else if (this.account.loc === 'bids') {
+                return this.$store.state.bids
+            } else if (this.account.loc === 'lots') {
+                return this.$store.state.lots
+            } else if (this.account.loc === 'storage') {
+                return this.$store.state.storage
+            } else if (this.account.loc === 'production') {
+                return this.$store.state.production
+            } else if (this.account.loc === 'favs') {
+                return this.$store.state.favs
+            }
         }
     }
 }
@@ -56,22 +73,6 @@ export default {
     flex-wrap: wrap;
     align-content: flex-start;
     position: relative;
-    animation-name: up-again;
-    animation-duration: 1s;
-    animation-timing-function: ease;
-    animation-iteration-count: 1;
-    animation-direction: normal;
-}
-
-@keyframes up-again {
-    from {
-        transform: translateY(10px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0px);
-        opacity: 1;
-    }
 }
 
 .observer {

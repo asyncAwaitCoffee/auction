@@ -19,7 +19,7 @@ export default {
 </script>
 <style scoped>
 section {
-    width: 60%;
+    flex: 1;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;

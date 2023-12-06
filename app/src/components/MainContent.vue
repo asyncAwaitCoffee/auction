@@ -1,18 +1,15 @@
 <template>
 
-    <HomePage class="board__content" v-show="account.loc == 'home'" />
+    <router-view v-slot="{ Component }">
+        <transition name="slide" mode="out-in">
+            <component :is="Component" :key="$router.path"></component>
+        </transition>
+    </router-view>
     
-    <div v-show="account.loc == 'logs'">
+<!--     <div v-show="account.loc == 'logs'">
         logs
-    </div>
+    </div> -->
 
-    <template v-show="account.loc != 'home'" v-for="data in data_list">
-        <MainContentBlock
-            v-show="data == account.loc"
-            :items="this[data]"
-            :loc="data"
-        />
-    </template>
 </template>
 
 <script>
@@ -88,6 +85,14 @@ export default {
 </script>
 <style scoped>
 
+.slide-enter-active,
+.slide-leave-active {
+    transition: all 0.5s;
+}
 
-
+.slide-enter-from,
+.slide-leave-to {
+    transform: translateY(10px);
+    opacity: 0;
+}
 </style>
