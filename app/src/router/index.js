@@ -10,12 +10,12 @@ const routes = [
     {path: "/", redirect: { name: 'Home' }},
     {path: "/home", name: "Home", component: HomePage},
     {path: "/auction", name: "Auction", component: MainContentBlock}, // /:parameter
-    {path: "/bids", name: "Bids", component: MainContentBlock},
-    {path: "/lots", name: "Lots", component: MainContentBlock},
-    {path: "/storage", name: "Storage", component: MainContentBlock},
-    {path: "/production", name: "Production", component: MainContentBlock},
-    {path: "/favs", name: "Favs", component: MainContentBlock},
-    {path: "/logs", name: "Logs", component: MainContentBlock},
+    {path: "/bids", name: "Bids", component: MainContentBlock, meta: {authRequired: true}},
+    {path: "/lots", name: "Lots", component: MainContentBlock, meta: {authRequired: true}},
+    {path: "/storage", name: "Storage", component: MainContentBlock, meta: {authRequired: true}},
+    {path: "/production", name: "Production", component: MainContentBlock, meta: {authRequired: true}},
+    {path: "/favs", name: "Favs", component: MainContentBlock, meta: {authRequired: true}},
+    {path: "/logs", name: "Logs", component: MainContentBlock, meta: {authRequired: true}},
     {path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound404},
 ]
 
@@ -24,9 +24,14 @@ const router = createRouter({
     history: createWebHistory()
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
+    if (to.meta.authRequired && !store.state.account.login) {
+        store.commit('page/setForm', {form: "SignUpForm"})
+        store.commit('account/changeLoc', "home")
+        return {name: "Home"}
+    }
+    console.log(to.meta.authRequired)
     store.commit('account/changeLoc', to.fullPath.slice(1))
-    next()
 })
 
 export default router
