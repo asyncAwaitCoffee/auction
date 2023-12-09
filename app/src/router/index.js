@@ -25,12 +25,13 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
-    if (to.meta.authRequired && !store.state.account.login) {
+    if (to.meta.authRequired && !store.state.account.login && !store.state.account.isAccountLoading) {
         store.commit('page/setForm', {form: "SignUpForm"})
-        store.commit('account/changeLoc', "home")
-        return {name: "Home"}
+        return {name: from.name}
     }
-    console.log(to.meta.authRequired)
+})
+
+router.afterEach((to, from) => {
     store.commit('account/changeLoc', to.fullPath.slice(1))
 })
 

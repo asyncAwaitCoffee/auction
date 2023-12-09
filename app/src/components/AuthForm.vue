@@ -35,6 +35,7 @@ export default {
     methods: {
         async submit() {
             this.$store.commit('page/clearForm')
+            this.$store.commit('account/setAccountLoading', true)
 
             const URL = `${adress}/${this.path}?login=${this.login}&password=${this.password}`
             const { ok, error, candy } = await fetch(URL, {credentials: 'include'})
@@ -44,8 +45,6 @@ export default {
             if ( ok ) {
                 this.$store.commit('account/setLogin', this.login)
                 localStorage.setItem('candy', candy);
-
-                this.$store.commit('account/setAccountLoading', true)
                 this.$store.commit('page/setPageLoading', true)
                 
                 this.$store.commit('account/clearLogin')
@@ -53,6 +52,8 @@ export default {
                 this.$store.commit('clearAuction')
                 await this.$store.dispatch('fetchAccountData')
                 this.$store.commit('account/setSocket')
+
+                this.$router.push({name: "Auction"})
                 //this.$store.dispatch('fetchAuction')
                 //this.$store.dispatch('fetchProduction')
                 //this.$store.dispatch('fetchStorage')

@@ -23,6 +23,7 @@ export default {
     components: {
         ItemCard, MainContentBlock, HomePage
     },
+
     data() {
         return {
             title: undefined,
@@ -31,55 +32,24 @@ export default {
             data_list: ["auction", "bids", "lots", "storage", "production", "favs"]
         }
     },
+
     computed: {
-        ...mapState(["account", "page"]),
-
-        auction() {
-            return this.$store.state.auction
-        },
-
-        bids() {
-            return this.$store.state.bids
-        },
-
-        lots() {
-            return this.$store.state.lots
-        },
-
-        storage() {
-            return this.$store.state.storage
-        },
-
-        production() {
-            return this.$store.state.production
-        },
-
-        favs() {
-            return this.$store.state.favs
-        },
-
-        items() {
-            if (this.account.loc === 'auction') {
-                return this.auction
-            } else if (this.account.loc === 'bids') {
-                return this.bids
-            } else if (this.account.loc === 'lots') {
-                return this.lots
-            } else if (this.account.loc === 'storage') {
-                return this.storage
-            } else if (this.account.loc === 'production') {
-                return this.production
-            } else if (this.account.loc === 'favs') {
-                return this.favs
-            }
-        }
+        ...mapState(["account", "page"])
     },
+
     async mounted() {
         await this.$store.dispatch('fetchAccountData')
-        //this.$store.dispatch('fetchAuction')
         this.$store.commit('account/setSocket')
-        //this.$store.dispatch('fetchProduction')
-        //this.$store.dispatch('fetchStorage') 
+    },
+    watch: {
+        'account.login':
+            function(newVal, prevVal) {
+                console.log(`Watch login: ${prevVal} -> ${newVal}`)
+            },
+        'account.isAccountLoading':
+            function(newVal, prevVal) {
+                console.log(`Watch isAccountLoading: ${prevVal} -> ${newVal}`)
+            }
     }
 }
 </script>

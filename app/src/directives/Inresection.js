@@ -4,7 +4,7 @@ export default {
     mounted(element, binding) {        
         let options = {
             rootMargin: "0px",
-            threshold: 0.5,
+            threshold: 0.90,
         }
 
         const callback = (entries) => {
