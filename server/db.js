@@ -5,8 +5,9 @@ const { Client } = pg;
 export class DB {
 
     static async queryRow(queryText, ...args) {
+        let client
         try {
-            const client = new Client({
+            client = new Client({
                 host: process.env.DB_HOST,
                 port: process.env.DB_PORT,
                 database: process.env.DB_DATABASE,
@@ -21,13 +22,17 @@ export class DB {
 
             return rows[0]
         } catch(error) {
-            console.error(error)
+            if (client) {
+                client.end()
+            }
+            throw new Error(error)
         }
     }
     
     static async queryRows(queryText, ...args) {
+        let client
         try {
-            const client = new Client({
+            client = new Client({
                 host: process.env.DB_HOST,
                 port: process.env.DB_PORT,
                 database: process.env.DB_DATABASE,
@@ -42,7 +47,10 @@ export class DB {
             
             return rows
         } catch(error) {
-            console.error(error)
+            if (client) {
+                client.end()
+            }
+            throw new Error(error)
         }
     }    
 }

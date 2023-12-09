@@ -7,7 +7,7 @@
                 >
             </item-card>
         </TransitionGroup>
-        <div
+        <div v-if="fetcher != undefined"
             class="observer"
             :class="{'content__loading': page.isPageLoading}"
             :data-observe="loc"
@@ -36,8 +36,6 @@ export default {
                 production: "fetchProduction",
                 favs: "fetchFavs",
             }
-
-            console.log("hi", fetchers[this.loc])
 
             return fetchers[this.loc]
         },

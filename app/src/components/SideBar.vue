@@ -1,7 +1,7 @@
 <template>
     <nav>
         <template v-for="loc in locations">
-            <side-bar-button v-if="account.login || ['home', 'auction', 'faq'].includes(loc)"
+            <side-bar-button
                 :id="loc"
             >        
             </side-bar-button>

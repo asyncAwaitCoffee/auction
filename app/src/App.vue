@@ -37,6 +37,26 @@ export default {
 </template>
 
 <style>
+
+
+:root {
+  --color-one: #bbd0db;
+  --color-two: #76a5bc;
+  --color-three: #4a7f98;
+  --color-four: #305b74;
+  --color-five: #1e3b4f;
+  --color-six: #152028;
+
+  --color-pop: rgba(25, 39, 45, 0.7);
+  
+  --gap: 5px;
+
+  --media-max: 900px;
+
+  --font-small: 1px;
+}
+
+
 * {
   margin: 0;
   padding: 0;
@@ -86,21 +106,6 @@ input[type="submit"] {
 }
 input[type="text"][disabled] {
   color: white;
-}
-
-:root {
-  --color-one: #bbd0db;
-  --color-two: #76a5bc;
-  --color-three: #4a7f98;
-  --color-four: #305b74;
-  --color-five: #1e3b4f;
-  --color-six: #152028;
-
-  --color-pop: rgba(25, 39, 45, 0.7);
-  
-  --gap: 5px;
-
-  --media-max: 900px;
 }
 
 button {
