@@ -144,3 +144,27 @@ create index favorites_ix on vue3_learning.favorites
 (
 	account_id
 );
+-----------------------------------------------------------------------	auction_log
+drop table if exists vue3_learning.auction_log;
+drop sequence if exists vue3_learning.auction_log_seq;
+
+create sequence vue3_learning.auction_log_seq
+as bigint
+increment by 1
+start with 1
+no cycle;
+
+create table vue3_learning.auction_log
+(
+	auction_log_id bigint not null default nextval('vue3_learning.auction_log_seq'),
+	account_id bigint not null,
+	item_id bigint not null,
+	money_spent bigint not null,
+	deal_date timestamp(0),
+	deal_type char(1)
+);
+
+create index auction_log_ix on vue3_learning.auction_log
+(
+	account_id
+);

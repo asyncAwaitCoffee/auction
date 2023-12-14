@@ -54,6 +54,9 @@ export default {
   --media-max: 900px;
 
   --font-small: 1px;
+
+  --font-h1: clamp(2rem, 4vmin, 6rem);
+  --font-p1: clamp(1rem, 2vmin, 3rem);
 }
 
 

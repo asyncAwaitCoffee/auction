@@ -25,6 +25,7 @@ export default createStore({
         favs: new Map(),
         storage: new Map(),
         production: new Map(),
+        logs: new Map(),
     },
     
     mutations: {
@@ -122,7 +123,6 @@ export default createStore({
                 .then(data => JSON.parse(data, parseIntegers))
 
             if (error) {
-                console.error(`error: ${error}`)
                 console.error(error)
             }
 
@@ -270,6 +270,11 @@ export default createStore({
                 //TODO: launching mutation directly on product doesn't work
                 this.commit('startCraft', state.production.get(product.production_id))
             }
+        },
+
+        setMyLog(state, log) {
+            log.done = true
+            state.logs.set(log.auction_log_id, log)
         },
     },    
 })

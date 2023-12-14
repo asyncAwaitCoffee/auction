@@ -333,3 +333,32 @@ where f.account_id = _account_id
 	and f.lot_id is not null
 limit _limit offset _offset;
 end $$;
+
+create or replace function vue3_learning.get_auction_log
+(
+	_account_id bigint
+)
+returns table
+(
+	auction_log_id bigint,
+	item jsonb,
+	money_spent bigint,
+	deal_type char(1),
+	deal_date timestamp(0)
+)
+language plpgsql
+security definer												-- ??
+as $$
+begin
+return query
+select
+	a.auction_log_id,
+	jsonb_build_object('item_id', i.item_id, 'title', i.title) as item,
+	a.money_spent,
+	a.deal_type,
+	a.deal_date
+from vue3_learning.auction_log as a
+	join vue3_learning.items as i
+		on i.item_id = a.item_id
+where a.account_id = _account_id;
+end $$;
