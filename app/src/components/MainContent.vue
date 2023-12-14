@@ -5,10 +5,6 @@
             <component :is="Component" :key="$router.path"></component>
         </transition>
     </router-view>
-    
-<!--     <div v-show="account.loc == 'logs'">
-        logs
-    </div> -->
 
 </template>
 

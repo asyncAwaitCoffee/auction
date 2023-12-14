@@ -107,27 +107,37 @@ app.post('/auction/bid', async (req, res) => {
   const account_id = res.locals.account_id
   const { lot_id } = req.query
 
-  const { money_left, last_bid, prev_bid, prev_bidder } = await DB.queryRow('call vue3_learning.bid_auction_lot($1, $2, null, null, null, null);', account_id, lot_id)
+  try {
 
-  if (!last_bid) {
-    res.send({ error: { money_left, last_bid, prev_bid, prev_bidder } })
-    return
+    const { money_left, last_bid, prev_bid, prev_bidder } = await DB.queryRow('call vue3_learning.bid_auction_lot($1, $2, null, null, null, null, null);', account_id, lot_id)
+
+    if (!last_bid) {
+      res.send({ error: 'last_bid is empty!' })
+      return
+    }
+
+    const prev_bidder_socket_id = connections.get(parseInt(prev_bidder))
+
+    if (prev_bidder_socket_id) {
+      io.to(prev_bidder_socket_id).emit('bid_refund', JSON.stringify({ lot_id, prev_bid }))
+    }
+
+    io.emit("bid_refresh", JSON.stringify({ lot_id, last_bid }))
+
+    res.send({ ok: true, money_left })
+
+  } catch(error) {
+
+    console.error(error.message)
+    res.send({ error: 'bid error in try-catch!' })   
   }
-  const prev_bidder_socket_id = connections.get(parseInt(prev_bidder))
-  if (prev_bidder_socket_id) {
-    io.to(prev_bidder_socket_id).emit('bid_refund', JSON.stringify({ lot_id, prev_bid }))
-  }
-
-  io.emit("bid_refresh", JSON.stringify({ lot_id, last_bid }))
-
-  res.send({ ok: true, money_left })
 })
 
 app.post('/auction/buy', async (req, res) => {
   const account_id = res.locals.account_id
   const { lot_id } = req.query
 
-  const { lot_owner, my_money, owner_money } = await DB.queryRow('call vue3_learning.buy_auction_lot($1, $2, null, null, null);', account_id, lot_id)
+  const { lot_owner, my_money, owner_money } = await DB.queryRow('call vue3_learning.buy_auction_lot($1, $2, null, null, null, null);', account_id, lot_id)
 
   const prev_bidder_socket_id = connections.get(parseInt(lot_owner))
   if (prev_bidder_socket_id) {
@@ -151,7 +161,7 @@ app.post('/auction/sell', async (req, res) => {
 app.post('/auction/cancel', async (req, res) => {
   const account_id = res.locals.account_id
   const { lot_id } = req.query
-  const need_to_del = await DB.queryRow('call vue3_learning.cancel_auction_lot($1, $2, null);', account_id, lot_id)
+  const { need_to_del } = await DB.queryRow('call vue3_learning.cancel_auction_lot($1, $2, null, null);', account_id, lot_id)
 
   io.emit("lot_remove", JSON.stringify({ lot_id }))
 
@@ -180,6 +190,13 @@ app.post('/production', async (req, res) => {
 
   const result = await DB.queryRows('select * from vue3_learning.get_production($1, $2, $3)', account_id, limit, offset)
   res.send({ ok: true, result })
+})
+
+app.post('/logs', async (req, res) => {
+  const account_id = res.locals.account_id
+  const result = await DB.queryRows('select * from vue3_learning.get_auction_log($1);', account_id)
+
+  res.send({ok: true, result})
 })
 
 const server = app.listen(port, () => {

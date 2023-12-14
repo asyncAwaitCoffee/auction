@@ -37,11 +37,13 @@ create or replace procedure vue3_learning.bid_auction_lot
 	out money_left bigint,
 	out prev_bid bigint,
 	out prev_bidder bigint,
-	out last_bid bigint
+	out last_bid bigint,
+	out deal_date timestamp(0)
 )
 language plpgsql
 security definer												-- ??
 as $$
+declare _item_id bigint;
 begin
 
 with bid as (
@@ -53,7 +55,7 @@ with bid as (
 		and a.highest_bidder <> _account_id
 		and a.lot_id = a_old.lot_id
 		--and now() between a.date_start and a.date_end
-	returning a.current_bid, a_old.current_bid as prev_bid, a_old.highest_bidder as prev_bidder
+	returning a.current_bid, a_old.current_bid as prev_bid, a_old.highest_bidder as prev_bidder, a.item_id
 ),
 pay as (
 	update vue3_learning.accounts as a
@@ -62,7 +64,7 @@ pay as (
 	where a.account_id = _account_id
 		and bid.current_bid is not null
 		and a.my_money >= bid.current_bid
-	returning a.my_money, bid.current_bid, bid.prev_bid, bid.prev_bidder
+	returning a.my_money, bid.current_bid, bid.prev_bid, bid.prev_bidder, bid.item_id
 ),
 prev_refund as (
 	update vue3_learning.accounts as a
@@ -72,12 +74,14 @@ prev_refund as (
 		and pay.prev_bid is not null
 )
 	select
-		pay.my_money, pay.current_bid, pay.prev_bid, pay.prev_bidder
-	into money_left, last_bid, prev_bid, prev_bidder
+		pay.my_money, pay.current_bid, pay.prev_bid, pay.prev_bidder, pay.item_id
+	into money_left, last_bid, prev_bid, prev_bidder, _item_id
 	from pay;
+	
+	call vue3_learning.log_the_deal(_account_id, _item_id, last_bid, 'b'::char(1), deal_date);
+	call vue3_learning.log_the_deal(prev_bidder, _item_id, prev_bid, 'r'::char(1), deal_date);
 end;
 $$;
-
 
 create or replace procedure vue3_learning.buy_auction_lot
 (
@@ -86,13 +90,17 @@ create or replace procedure vue3_learning.buy_auction_lot
 
 	out my_money bigint,
 	out lot_owner bigint,
-	out owner_money bigint
+	out owner_money bigint,
+	out deal_date timestamp(0)
 )
 language plpgsql
 security definer												-- ??
 as $$
 declare _item_id bigint;
 declare _quantity bigint;
+declare _price bigint;
+declare _refunded_money bigint;
+declare _highest_bidder bigint;
 begin
 
 	if exists
@@ -113,12 +121,12 @@ begin
 			a.price,
 			a.quantity,
 			a.current_bid,
-			a.highest_bidder = _account_id as is_bidder,
+			a.highest_bidder,
 			a.lot_owner
 	),
 	pay as (
 		update vue3_learning.accounts as a
-			set my_money = a.my_money - lot.price + case when is_bidder then lot.current_bid else 0 end
+			set my_money = a.my_money - lot.price
 		from lot
 		where a.account_id = _account_id
 			and a.my_money >= lot.price
@@ -130,18 +138,30 @@ begin
 		from lot
 		where a.account_id = lot.lot_owner
 		returning a.my_money as recieved_money
+	),
+	refund as (
+		update vue3_learning.accounts as a
+			set my_money = a.my_money + lot.current_bid
+		from lot
+		where a.account_id = lot.highest_bidder
+		returning lot.current_bid as refunded_money
 	)
 	select
 		lot.item_id,
 		pay.my_money,
 		lot.quantity,
 		lot.lot_owner,
-		income.recieved_money
-	into _item_id, my_money, _quantity, lot_owner, owner_money
+		income.recieved_money,
+		pay.price,
+		lot.highest_bidder,
+		refund.refunded_money
+	into _item_id, my_money, _quantity, lot_owner, owner_money, _price, _highest_bidder, _refunded_money
 	from lot
 		left join pay
 			on true
 		left join income
+			on true
+		left join refund
 			on true;
 	
 	if _item_id is null or my_money is null
@@ -151,6 +171,10 @@ begin
 	if found then
 		call vue3_learning.add_item_to_storage(_account_id, _item_id, _quantity);
 	end if;
+	
+	call vue3_learning.log_the_deal(_account_id, _item_id, _price, 'a'::char(1), deal_date);
+	call vue3_learning.log_the_deal(lot_owner, _item_id, _price, 's'::char(1), deal_date);
+	call vue3_learning.log_the_deal(_highest_bidder, _item_id, _refunded_money, 'r'::char(1), deal_date);
 end;
 $$;
 
@@ -197,21 +221,25 @@ create or replace procedure vue3_learning.cancel_auction_lot
 	_account_id bigint,
 	_lot_id bigint,
 	
-	out need_to_del boolean
+	out need_to_del boolean,
+	out deal_date timestamp(0)
 )
 language plpgsql
 security definer												-- ??
 as $$
 declare _item_id bigint;
 declare _quantity bigint;
+declare _highest_bidder bigint;
+declare _refunded_money bigint;
 begin
 	delete from vue3_learning.auction as a
 	where a.lot_id = _lot_id
 		and a.lot_owner = _account_id
-	returning item_id, quantity, true into _item_id, _quantity, need_to_del;
+	returning item_id, quantity, true, highest_bidder, current_bid into _item_id, _quantity, need_to_del, _highest_bidder, _refunded_money;
 	
 	if found then
 		call vue3_learning.add_item_to_storage(_account_id, _item_id, _quantity);
+		call vue3_learning.log_the_deal(_highest_bidder, _item_id, _refunded_money, 'r'::char(1), deal_date);
 	end if;
 end;
 $$;
@@ -290,5 +318,27 @@ as $$ begin
 		values
 			(_account_id, _lot_id);
 	end if;
+end;
+$$;
+
+create or replace procedure vue3_learning.log_the_deal
+(
+	_account_id bigint,
+	_item_id bigint,
+	_money_spent bigint,
+	_deal_type char(1),
+	
+	out the_deal_date timestamp(0)
+)
+language plpgsql
+security definer												-- ??
+as $$ begin
+
+	insert into vue3_learning.auction_log
+		(account_id, item_id, money_spent, deal_date, deal_type)
+	values
+		(_account_id, _item_id, _money_spent, now(), _deal_type)
+	returning deal_date into the_deal_date;
+		
 end;
 $$;

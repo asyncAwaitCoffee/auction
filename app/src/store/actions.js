@@ -113,8 +113,26 @@ export const fetchFavs = async ({ commit, state }) =>
         commit("page/setPageLoading", false)
     }
 
+export const fetchLogs = async ({ commit, state }) =>
+    {
+        commit("page/setPageLoading", true)
+        const result = await loadData("logs", state.page.loadLimit, state.favs.size)
+
+        if (result) {
+            await assignLoadedData(result, (log) => commit("setMyLog", log))
+
+            if (result.length >= state.page.loadLimit) {
+                state.page.pageLogs++
+            } else {
+                state.page.onlyForceLoad = true
+            }
+        }
+
+        commit("page/setPageLoading", false)
+    }
+
 async function loadData(dataSource, limit, offset) {
-    const URL = `${adress}/${dataSource}?limit=${limit}&offset=${offset}`            
+    const URL = `${adress}/${dataSource}?limit=${limit}&offset=${offset}`
     const { ok, error, result } = await fetch(URL, {
         credentials: 'include',
         method: 'POST',

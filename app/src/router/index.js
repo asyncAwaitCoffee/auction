@@ -5,6 +5,7 @@ import {createWebHistory} from 'vue-router'
 import HomePage from "@/components/HomePage.vue"
 import MainContentBlock from "@/components/MainContentBlock.vue"
 import NotFound404 from "@/components/NotFound404.vue"
+import DealsLog from "@/components/DealsLog.vue"
 
 const routes = [
     {path: "/", redirect: { name: 'Home' }},
@@ -15,7 +16,7 @@ const routes = [
     {path: "/storage", name: "Storage", component: MainContentBlock, meta: {authRequired: true}},
     {path: "/production", name: "Production", component: MainContentBlock, meta: {authRequired: true}},
     {path: "/favs", name: "Favs", component: MainContentBlock, meta: {authRequired: true}},
-    {path: "/logs", name: "Logs", component: MainContentBlock, meta: {authRequired: true}},
+    {path: "/logs", name: "Logs", component: DealsLog, meta: {authRequired: true}},
     {path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound404},
 ]
 

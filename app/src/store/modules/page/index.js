@@ -12,8 +12,9 @@ export default {
         pageStorage: 0,
         pageProduction: 0,
         pageFavs: 0,
+        pageLogs: 0,
         onlyForceLoad: false,
-        loadLimit: 20
+        loadLimit: 25
     },
     mutations: {
 
