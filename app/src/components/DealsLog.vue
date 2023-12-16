@@ -11,10 +11,7 @@
             <tr v-for="([log_id, log], index) of logs">
                 <td>{{ log.item.title }}</td>
                 <td
-                    :class="{
-                        money__refund: log.deal_type == 'r',
-                        money__spent: log.deal_type != 'r',
-                        }"> {{ `${log.deal_type != 'r' ? '-' : '+'}${log.money_spent}` }}G</td>
+                    :class="['r', 's'].includes(log.deal_type) ? 'money__refund' : 'money__spent'"> {{ log.money_spent }}G</td>
                 <td>{{ new Date(log.deal_date).toLocaleString() }}</td>
                 <td>{{ getType(log.deal_type) }}</td>
             </tr>
@@ -37,7 +34,8 @@ export default {
             const dict = {
                 a: "Bought",
                 b: "Bidded",
-                r: "Refunded"
+                r: "Refunded",
+                s: "Sold"
             }
 
             return dict[letter]
@@ -85,12 +83,20 @@ export default {
         background-color: rgba(190, 0, 0, 0.3);
     }
 
+    .money__spent::before {
+        content: '-';
+    }
+
     tr:nth-child(even) .money__spent {
         background-color: rgb(140, 0, 0, 0.3);
     }
 
     .money__refund {
         background-color: rgb(0, 190, 0, 0.3);
+    }
+
+    .money__refund::before {
+        content: '+';
     }
 
     tr:nth-child(even) .money__refund {
