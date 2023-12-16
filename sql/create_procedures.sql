@@ -334,6 +334,8 @@ language plpgsql
 security definer												-- ??
 as $$ begin
 
+	if _money_spent is null then return; end if;
+
 	insert into vue3_learning.auction_log
 		(account_id, item_id, money_spent, deal_date, deal_type)
 	values
