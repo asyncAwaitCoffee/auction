@@ -226,6 +226,7 @@ export default createStore({
             state.favs.clear()
             state.storage.clear()
             state.production.clear()
+            state.logs.clear()
         },
 
         setAuctionLot(state, lot) {
